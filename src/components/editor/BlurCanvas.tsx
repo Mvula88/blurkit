@@ -13,6 +13,7 @@ interface BlurCanvasProps {
   onAddBlurRegion: (region: BlurRegion) => void;
   onUpdateBlurRegion: (id: string, updates: Partial<BlurRegion>) => void;
   onSelectRegion: (id: string | null) => void;
+  onScaleChange?: (scale: number) => void;
 }
 
 export function BlurCanvas({
@@ -24,6 +25,7 @@ export function BlurCanvas({
   onAddBlurRegion,
   onUpdateBlurRegion,
   onSelectRegion,
+  onScaleChange,
 }: BlurCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isDrawing, setIsDrawing] = useState(false);
@@ -261,12 +263,17 @@ export function BlurCanvas({
       canvas.width = img.width * scale;
       canvas.height = img.height * scale;
 
+      // Notify parent of the scale factor
+      if (onScaleChange) {
+        onScaleChange(scale);
+      }
+
       imageRef.current = img;
       setImageLoaded(true);
       redrawCanvas();
     };
     img.src = image;
-  }, [image, redrawCanvas]);
+  }, [image, redrawCanvas, onScaleChange]);
 
   // Redraw canvas when blur regions change
   useEffect(() => {

@@ -19,6 +19,7 @@ export default function EditorPage() {
   const [blurIntensity, setBlurIntensity] = useState(10);
   const [blurRegions, setBlurRegions] = useState<BlurRegion[]>([]);
   const [selectedRegionId, setSelectedRegionId] = useState<string | null>(null);
+  const [canvasScale, setCanvasScale] = useState(1);
 
   // History for undo/redo
   const [history, setHistory] = useState<BlurRegion[][]>([[]]);
@@ -99,33 +100,40 @@ export default function EditorPage() {
       // Draw original image
       ctx.drawImage(img, 0, 0);
 
+      // Calculate scale factor to convert canvas coords to image coords
+      const scale = 1 / canvasScale;
+
       // Apply blur regions
       blurRegions.forEach((region) => {
         ctx.save();
         ctx.filter = `blur(${region.blurIntensity}px)`;
 
+        // Scale coordinates from canvas to original image size
+        const startX = region.startX * scale;
+        const startY = region.startY * scale;
+        const endX = region.endX * scale;
+        const endY = region.endY * scale;
+
         if (region.type === 'rectangle') {
-          const width = region.endX - region.startX;
-          const height = region.endY - region.startY;
+          const width = endX - startX;
+          const height = endY - startY;
           ctx.drawImage(
             img,
-            region.startX,
-            region.startY,
+            startX,
+            startY,
             width,
             height,
-            region.startX,
-            region.startY,
+            startX,
+            startY,
             width,
             height
           );
         } else if (region.type === 'circle') {
-          const centerX = (region.startX + region.endX) / 2;
-          const centerY = (region.startY + region.endY) / 2;
+          const centerX = (startX + endX) / 2;
+          const centerY = (startY + endY) / 2;
           const radius =
-            Math.sqrt(
-              Math.pow(region.endX - region.startX, 2) +
-                Math.pow(region.endY - region.startY, 2)
-            ) / 2;
+            Math.sqrt(Math.pow(endX - startX, 2) + Math.pow(endY - startY, 2)) /
+            2;
 
           ctx.beginPath();
           ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
@@ -218,6 +226,7 @@ export default function EditorPage() {
                 onAddBlurRegion={handleAddBlurRegion}
                 onUpdateBlurRegion={handleUpdateBlurRegion}
                 onSelectRegion={setSelectedRegionId}
+                onScaleChange={setCanvasScale}
               />
             </div>
 
