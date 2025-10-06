@@ -6,6 +6,10 @@ import { ImageUpload } from '@/components/editor/ImageUpload';
 import { BlurCanvas } from '@/components/editor/BlurCanvas';
 import { Toolbar } from '@/components/editor/Toolbar';
 import { useAuth } from '@/hooks/useAuth';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Download, Save, Upload } from 'lucide-react';
+import { toast } from 'sonner';
 import type { Tool, BlurRegion } from '@/types';
 
 export default function EditorPage() {
@@ -79,6 +83,84 @@ export default function EditorPage() {
     }
   };
 
+  const handleExport = () => {
+    if (!image) return;
+
+    // Create a canvas to render the blurred image
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const img = new Image();
+    img.onload = () => {
+      canvas.width = img.width;
+      canvas.height = img.height;
+
+      // Draw original image
+      ctx.drawImage(img, 0, 0);
+
+      // Apply blur regions
+      blurRegions.forEach((region) => {
+        ctx.save();
+        ctx.filter = `blur(${region.blurIntensity}px)`;
+
+        if (region.type === 'rectangle') {
+          const width = region.endX - region.startX;
+          const height = region.endY - region.startY;
+          ctx.drawImage(
+            img,
+            region.startX,
+            region.startY,
+            width,
+            height,
+            region.startX,
+            region.startY,
+            width,
+            height
+          );
+        } else if (region.type === 'circle') {
+          const centerX = (region.startX + region.endX) / 2;
+          const centerY = (region.startY + region.endY) / 2;
+          const radius =
+            Math.sqrt(
+              Math.pow(region.endX - region.startX, 2) +
+                Math.pow(region.endY - region.startY, 2)
+            ) / 2;
+
+          ctx.beginPath();
+          ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+          ctx.clip();
+          ctx.drawImage(img, 0, 0);
+        }
+
+        ctx.restore();
+      });
+
+      // Download the image
+      canvas.toBlob((blob) => {
+        if (!blob) return;
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `blurred-image-${Date.now()}.png`;
+        a.click();
+        URL.revokeObjectURL(url);
+        toast.success('Image exported successfully!');
+      });
+    };
+    img.src = image;
+  };
+
+  const handleSave = async () => {
+    if (!user) {
+      toast.error('Please sign in to save projects');
+      return;
+    }
+
+    toast.info('Save functionality coming soon!');
+    // TODO: Implement save to Supabase
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <Navbar user={user} />
@@ -91,6 +173,36 @@ export default function EditorPage() {
             information
           </p>
         </div>
+
+        {image && (
+          <Card className="mb-6">
+            <CardContent className="p-4">
+              <div className="flex items-center gap-3">
+                <span className="font-semibold text-sm">Actions:</span>
+                <div className="flex gap-2 flex-wrap">
+                  <Button onClick={handleExport} size="sm">
+                    <Download className="mr-2 h-4 w-4" />
+                    Export Image
+                  </Button>
+                  {user && (
+                    <Button onClick={handleSave} variant="outline" size="sm">
+                      <Save className="mr-2 h-4 w-4" />
+                      Save Project
+                    </Button>
+                  )}
+                  <Button
+                    onClick={() => setImage(null)}
+                    variant="outline"
+                    size="sm"
+                  >
+                    <Upload className="mr-2 h-4 w-4" />
+                    New Image
+                  </Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         {!image ? (
           <ImageUpload onImageUpload={handleImageUpload} />
@@ -116,16 +228,12 @@ export default function EditorPage() {
                 blurIntensity={blurIntensity}
                 onBlurIntensityChange={setBlurIntensity}
                 blurRegions={blurRegions}
-                selectedRegionId={selectedRegionId}
                 onRemoveBlurRegion={handleRemoveBlurRegion}
                 onClearAll={handleClearAll}
                 onUndo={handleUndo}
                 onRedo={handleRedo}
                 canUndo={historyIndex > 0}
                 canRedo={historyIndex < history.length - 1}
-                onNewImage={() => setImage(null)}
-                image={image}
-                user={user}
               />
             </div>
           </div>

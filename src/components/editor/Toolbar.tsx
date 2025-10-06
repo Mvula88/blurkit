@@ -8,16 +8,11 @@ import {
   Square,
   Circle,
   Trash2,
-  Download,
-  Save,
-  Upload,
   MousePointer2,
   Undo,
   Redo,
 } from 'lucide-react';
 import type { Tool, BlurRegion } from '@/types';
-import type { User } from '@supabase/supabase-js';
-import { toast } from 'sonner';
 
 interface ToolbarProps {
   tool: Tool;
@@ -25,16 +20,12 @@ interface ToolbarProps {
   blurIntensity: number;
   onBlurIntensityChange: (intensity: number) => void;
   blurRegions: BlurRegion[];
-  selectedRegionId: string | null;
   onRemoveBlurRegion: (id: string) => void;
   onClearAll: () => void;
   onUndo: () => void;
   onRedo: () => void;
   canUndo: boolean;
   canRedo: boolean;
-  onNewImage: () => void;
-  image: string;
-  user: User | null;
 }
 
 export function Toolbar({
@@ -49,85 +40,7 @@ export function Toolbar({
   onRedo,
   canUndo,
   canRedo,
-  onNewImage,
-  image,
-  user,
 }: ToolbarProps) {
-  const handleExport = () => {
-    // Create a canvas to render the blurred image
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    const img = new Image();
-    img.onload = () => {
-      canvas.width = img.width;
-      canvas.height = img.height;
-
-      // Draw original image
-      ctx.drawImage(img, 0, 0);
-
-      // Apply blur regions
-      blurRegions.forEach((region) => {
-        ctx.save();
-        ctx.filter = `blur(${region.blurIntensity}px)`;
-
-        if (region.type === 'rectangle') {
-          const width = region.endX - region.startX;
-          const height = region.endY - region.startY;
-          ctx.drawImage(
-            img,
-            region.startX,
-            region.startY,
-            width,
-            height,
-            region.startX,
-            region.startY,
-            width,
-            height
-          );
-        } else if (region.type === 'circle') {
-          const centerX = (region.startX + region.endX) / 2;
-          const centerY = (region.startY + region.endY) / 2;
-          const radius =
-            Math.sqrt(
-              Math.pow(region.endX - region.startX, 2) +
-                Math.pow(region.endY - region.startY, 2)
-            ) / 2;
-
-          ctx.beginPath();
-          ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
-          ctx.clip();
-          ctx.drawImage(img, 0, 0);
-        }
-
-        ctx.restore();
-      });
-
-      // Download the image
-      canvas.toBlob((blob) => {
-        if (!blob) return;
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `blurred-image-${Date.now()}.png`;
-        a.click();
-        URL.revokeObjectURL(url);
-        toast.success('Image exported successfully!');
-      });
-    };
-    img.src = image;
-  };
-
-  const handleSave = async () => {
-    if (!user) {
-      toast.error('Please sign in to save projects');
-      return;
-    }
-
-    toast.info('Save functionality coming soon!');
-    // TODO: Implement save to Supabase
-  };
 
   return (
     <div className="space-y-6">
@@ -240,29 +153,6 @@ export function Toolbar({
               Clear All
             </Button>
           )}
-        </CardContent>
-      </Card>
-
-      {/* Actions */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Actions</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-2">
-          <Button onClick={handleExport} className="w-full">
-            <Download className="mr-2 h-4 w-4" />
-            Export Image
-          </Button>
-          {user && (
-            <Button onClick={handleSave} variant="outline" className="w-full">
-              <Save className="mr-2 h-4 w-4" />
-              Save Project
-            </Button>
-          )}
-          <Button onClick={onNewImage} variant="outline" className="w-full">
-            <Upload className="mr-2 h-4 w-4" />
-            New Image
-          </Button>
         </CardContent>
       </Card>
     </div>
