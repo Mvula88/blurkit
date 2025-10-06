@@ -1,102 +1,185 @@
-import Image from 'next/image';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import {
+  ImageIcon,
+  Sparkles,
+  Zap,
+  Lock,
+  Download,
+  ArrowRight,
+} from 'lucide-react';
 
 export default function Home() {
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{' '}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <div className="min-h-screen bg-gradient-to-b from-background to-muted">
+      {/* Hero Section */}
+      <section className="container mx-auto px-4 py-20 sm:py-32">
+        <div className="flex flex-col items-center text-center space-y-8">
+          <div className="inline-flex items-center rounded-full border px-4 py-1.5 text-sm">
+            <Sparkles className="mr-2 h-4 w-4 text-primary" />
+            Privacy-First Image Blur Tool
+          </div>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight max-w-4xl">
+            Blur Images with{' '}
+            <span className="text-primary">Precision & Privacy</span>
+          </h1>
+
+          <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl">
+            Protect sensitive information in your images with BlurKit. Draw
+            custom blur regions, adjust intensity, and export instantly - all in
+            your browser.
+          </p>
+
+          <div className="flex flex-col sm:flex-row gap-4 mt-8">
+            <Link href="/login">
+              <Button size="lg" className="group">
+                Get Started Free
+                <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </Button>
+            </Link>
+            <Link href="/editor">
+              <Button size="lg" variant="outline">
+                Try Without Sign Up
+              </Button>
+            </Link>
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+      </section>
+
+      {/* Features Section */}
+      <section className="container mx-auto px-4 py-20">
+        <div className="text-center mb-16">
+          <h2 className="text-3xl sm:text-4xl font-bold mb-4">
+            Powerful Features
+          </h2>
+          <p className="text-muted-foreground text-lg">
+            Everything you need to blur images professionally
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {/* Feature 1 */}
+          <div className="flex flex-col items-center text-center p-6 rounded-lg border bg-card">
+            <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
+              <ImageIcon className="h-6 w-6 text-primary" />
+            </div>
+            <h3 className="text-xl font-semibold mb-2">Custom Blur Regions</h3>
+            <p className="text-muted-foreground">
+              Draw precise rectangular or circular blur areas exactly where you
+              need them
+            </p>
+          </div>
+
+          {/* Feature 2 */}
+          <div className="flex flex-col items-center text-center p-6 rounded-lg border bg-card">
+            <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
+              <Zap className="h-6 w-6 text-primary" />
+            </div>
+            <h3 className="text-xl font-semibold mb-2">Adjustable Intensity</h3>
+            <p className="text-muted-foreground">
+              Fine-tune blur strength with an easy-to-use slider for perfect
+              results
+            </p>
+          </div>
+
+          {/* Feature 3 */}
+          <div className="flex flex-col items-center text-center p-6 rounded-lg border bg-card">
+            <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
+              <Lock className="h-6 w-6 text-primary" />
+            </div>
+            <h3 className="text-xl font-semibold mb-2">Privacy First</h3>
+            <p className="text-muted-foreground">
+              All processing happens in your browser. Your images never leave
+              your device
+            </p>
+          </div>
+
+          {/* Feature 4 */}
+          <div className="flex flex-col items-center text-center p-6 rounded-lg border bg-card">
+            <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
+              <Download className="h-6 w-6 text-primary" />
+            </div>
+            <h3 className="text-xl font-semibold mb-2">Export Instantly</h3>
+            <p className="text-muted-foreground">
+              Download your blurred images in high quality with a single click
+            </p>
+          </div>
+
+          {/* Feature 5 */}
+          <div className="flex flex-col items-center text-center p-6 rounded-lg border bg-card">
+            <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
+              <Sparkles className="h-6 w-6 text-primary" />
+            </div>
+            <h3 className="text-xl font-semibold mb-2">Save Projects</h3>
+            <p className="text-muted-foreground">
+              Create an account to save your blur configurations for later use
+            </p>
+          </div>
+
+          {/* Feature 6 */}
+          <div className="flex flex-col items-center text-center p-6 rounded-lg border bg-card">
+            <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
+              <Zap className="h-6 w-6 text-primary" />
+            </div>
+            <h3 className="text-xl font-semibold mb-2">Lightning Fast</h3>
+            <p className="text-muted-foreground">
+              Real-time preview with smooth performance, even on large images
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="container mx-auto px-4 py-20">
+        <div className="rounded-2xl bg-primary/5 border p-12 text-center">
+          <h2 className="text-3xl sm:text-4xl font-bold mb-4">
+            Ready to Blur with Confidence?
+          </h2>
+          <p className="text-muted-foreground text-lg mb-8 max-w-2xl mx-auto">
+            Join thousands of users protecting their privacy with BlurKit. Start
+            blurring sensitive information in seconds.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link href="/login">
+              <Button size="lg">Create Free Account</Button>
+            </Link>
+            <Link href="/editor">
+              <Button size="lg" variant="outline">
+                Try Editor Now
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="container mx-auto px-4 py-8 border-t">
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
+          <p className="text-sm text-muted-foreground">
+            © 2025 BlurKit. All rights reserved.
+          </p>
+          <div className="flex gap-6">
+            <Link
+              href="/privacy"
+              className="text-sm text-muted-foreground hover:text-foreground"
+            >
+              Privacy
+            </Link>
+            <Link
+              href="/terms"
+              className="text-sm text-muted-foreground hover:text-foreground"
+            >
+              Terms
+            </Link>
+            <Link
+              href="/contact"
+              className="text-sm text-muted-foreground hover:text-foreground"
+            >
+              Contact
+            </Link>
+          </div>
+        </div>
       </footer>
     </div>
   );
