@@ -43,7 +43,6 @@ export function Toolbar({
   blurIntensity,
   onBlurIntensityChange,
   blurRegions,
-  selectedRegionId,
   onRemoveBlurRegion,
   onClearAll,
   onUndo,

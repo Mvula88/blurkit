@@ -28,13 +28,16 @@ export default function EditorPage() {
     setSelectedRegionId(null);
   };
 
-  const updateHistory = useCallback((newRegions: BlurRegion[]) => {
-    const newHistory = history.slice(0, historyIndex + 1);
-    newHistory.push(newRegions);
-    setHistory(newHistory);
-    setHistoryIndex(newHistory.length - 1);
-    setBlurRegions(newRegions);
-  }, [history, historyIndex]);
+  const updateHistory = useCallback(
+    (newRegions: BlurRegion[]) => {
+      const newHistory = history.slice(0, historyIndex + 1);
+      newHistory.push(newRegions);
+      setHistory(newHistory);
+      setHistoryIndex(newHistory.length - 1);
+      setBlurRegions(newRegions);
+    },
+    [history, historyIndex]
+  );
 
   const handleAddBlurRegion = (region: BlurRegion) => {
     updateHistory([...blurRegions, region]);

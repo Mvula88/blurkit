@@ -292,7 +292,9 @@ export function BlurCanvas({
     if (tool === 'select') {
       // Check if clicking on selected region's resize handle
       if (selectedRegionId) {
-        const selectedRegion = blurRegions.find((r) => r.id === selectedRegionId);
+        const selectedRegion = blurRegions.find(
+          (r) => r.id === selectedRegionId
+        );
         if (selectedRegion) {
           const handle = getResizeHandle(pos.x, pos.y, selectedRegion);
           if (handle) {
@@ -345,25 +347,37 @@ export function BlurCanvas({
 
         switch (resizeHandle) {
           case 'nw':
-            updates = { startX: selectedRegion.startX + dx, startY: selectedRegion.startY + dy };
+            updates = {
+              startX: selectedRegion.startX + dx,
+              startY: selectedRegion.startY + dy,
+            };
             break;
           case 'n':
             updates = { startY: selectedRegion.startY + dy };
             break;
           case 'ne':
-            updates = { endX: selectedRegion.endX + dx, startY: selectedRegion.startY + dy };
+            updates = {
+              endX: selectedRegion.endX + dx,
+              startY: selectedRegion.startY + dy,
+            };
             break;
           case 'e':
             updates = { endX: selectedRegion.endX + dx };
             break;
           case 'se':
-            updates = { endX: selectedRegion.endX + dx, endY: selectedRegion.endY + dy };
+            updates = {
+              endX: selectedRegion.endX + dx,
+              endY: selectedRegion.endY + dy,
+            };
             break;
           case 's':
             updates = { endY: selectedRegion.endY + dy };
             break;
           case 'sw':
-            updates = { startX: selectedRegion.startX + dx, endY: selectedRegion.endY + dy };
+            updates = {
+              startX: selectedRegion.startX + dx,
+              endY: selectedRegion.endY + dy,
+            };
             break;
           case 'w':
             updates = { startX: selectedRegion.startX + dx };
