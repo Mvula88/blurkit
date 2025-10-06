@@ -41,7 +41,7 @@ export function ImageUpload({ onImageUpload }: ImageUploadProps) {
   );
 
   const handleDrop = useCallback(
-    (e: React.DragEvent<HTMLDivElement>) => {
+    (e: React.DragEvent<HTMLLabelElement>) => {
       e.preventDefault();
       const file = e.dataTransfer.files?.[0];
       if (!file) return;
@@ -66,7 +66,7 @@ export function ImageUpload({ onImageUpload }: ImageUploadProps) {
     [onImageUpload]
   );
 
-  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+  const handleDragOver = (e: React.DragEvent<HTMLLabelElement>) => {
     e.preventDefault();
   };
 
