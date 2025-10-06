@@ -127,7 +127,9 @@ export default function EditorPage() {
             const centerX = (startX + endX) / 2;
             const centerY = (startY + endY) / 2;
             const radius =
-              Math.sqrt(Math.pow(endX - startX, 2) + Math.pow(endY - startY, 2)) / 2;
+              Math.sqrt(
+                Math.pow(endX - startX, 2) + Math.pow(endY - startY, 2)
+              ) / 2;
             ctx.beginPath();
             ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
             ctx.fill();
@@ -156,7 +158,9 @@ export default function EditorPage() {
             const centerX = (startX + endX) / 2;
             const centerY = (startY + endY) / 2;
             const radius =
-              Math.sqrt(Math.pow(endX - startX, 2) + Math.pow(endY - startY, 2)) / 2;
+              Math.sqrt(
+                Math.pow(endX - startX, 2) + Math.pow(endY - startY, 2)
+              ) / 2;
 
             ctx.beginPath();
             ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
@@ -198,7 +202,9 @@ export default function EditorPage() {
             const centerX = (startX + endX) / 2;
             const centerY = (startY + endY) / 2;
             const radius =
-              Math.sqrt(Math.pow(endX - startX, 2) + Math.pow(endY - startY, 2)) / 2;
+              Math.sqrt(
+                Math.pow(endX - startX, 2) + Math.pow(endY - startY, 2)
+              ) / 2;
 
             ctx.beginPath();
             ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
