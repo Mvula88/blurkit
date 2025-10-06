@@ -37,35 +37,56 @@ export function Navbar({ user }: NavbarProps) {
   };
 
   return (
-    <nav className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <nav className="sticky top-0 z-50 border-b bg-white/80 backdrop-blur-lg supports-[backdrop-filter]:bg-white/60 shadow-sm">
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
-          <Link href="/" className="flex items-center space-x-2">
-            <ImageIcon className="h-6 w-6 text-primary" />
-            <span className="text-xl font-bold">BlurKit</span>
+          <Link href="/" className="flex items-center gap-2 group">
+            <div className="h-9 w-9 rounded-lg bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center group-hover:scale-105 transition-transform">
+              <ImageIcon className="h-5 w-5 text-white" />
+            </div>
+            <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+              BlurKit
+            </span>
           </Link>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
             {user ? (
               <>
                 <Link href="/dashboard">
-                  <Button variant="ghost">Dashboard</Button>
+                  <Button
+                    variant="ghost"
+                    className="hover:bg-blue-50 hover:text-blue-700"
+                  >
+                    Dashboard
+                  </Button>
                 </Link>
                 <Link href="/editor">
-                  <Button variant="ghost">Editor</Button>
+                  <Button
+                    variant="ghost"
+                    className="hover:bg-blue-50 hover:text-blue-700"
+                  >
+                    Editor
+                  </Button>
                 </Link>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="outline" size="icon">
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      className="border-blue-200 hover:bg-blue-50 hover:border-blue-300"
+                    >
                       <User className="h-4 w-4" />
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <div className="px-2 py-1.5 text-sm text-muted-foreground">
+                  <DropdownMenuContent align="end" className="w-56">
+                    <div className="px-2 py-1.5 text-sm font-medium">
                       {user.email}
                     </div>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={handleSignOut}>
+                    <DropdownMenuItem
+                      onClick={handleSignOut}
+                      className="text-red-600 focus:text-red-700 focus:bg-red-50"
+                    >
                       <LogOut className="mr-2 h-4 w-4" />
                       Sign Out
                     </DropdownMenuItem>
@@ -75,10 +96,14 @@ export function Navbar({ user }: NavbarProps) {
             ) : (
               <>
                 <Link href="/login">
-                  <Button variant="ghost">Sign In</Button>
+                  <Button variant="ghost" className="hover:bg-blue-50 hover:text-blue-700">
+                    Sign In
+                  </Button>
                 </Link>
                 <Link href="/signup">
-                  <Button>Get Started</Button>
+                  <Button className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-sm">
+                    Get Started
+                  </Button>
                 </Link>
               </>
             )}

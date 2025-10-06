@@ -170,30 +170,46 @@ export default function EditorPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
       <Navbar user={user} />
 
       <main className="container mx-auto px-4 py-8">
-        <div className="mb-6">
-          <h1 className="text-3xl font-bold mb-2">Image Editor</h1>
-          <p className="text-muted-foreground">
+        <div className="mb-8">
+          <div className="flex items-center gap-2 mb-3">
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+              Image Editor
+            </h1>
+            <div className="h-2 w-2 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 animate-pulse" />
+          </div>
+          <p className="text-lg text-muted-foreground">
             Upload an image and draw blur regions to protect sensitive
             information
           </p>
         </div>
 
         {image && (
-          <Card className="mb-6">
-            <CardContent className="p-4">
-              <div className="flex items-center gap-3">
-                <span className="font-semibold text-sm">Actions:</span>
+          <Card className="mb-6 border-blue-100 bg-gradient-to-r from-blue-50/50 to-indigo-50/50 shadow-sm">
+            <CardContent className="p-5">
+              <div className="flex items-center gap-4">
+                <span className="font-bold text-sm bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+                  Quick Actions
+                </span>
                 <div className="flex gap-2 flex-wrap">
-                  <Button onClick={handleExport} size="sm">
+                  <Button
+                    onClick={handleExport}
+                    size="sm"
+                    className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-sm"
+                  >
                     <Download className="mr-2 h-4 w-4" />
                     Export Image
                   </Button>
                   {user && (
-                    <Button onClick={handleSave} variant="outline" size="sm">
+                    <Button
+                      onClick={handleSave}
+                      variant="outline"
+                      size="sm"
+                      className="border-blue-200 hover:bg-blue-50 hover:border-blue-300"
+                    >
                       <Save className="mr-2 h-4 w-4" />
                       Save Project
                     </Button>
@@ -202,6 +218,7 @@ export default function EditorPage() {
                     onClick={() => setImage(null)}
                     variant="outline"
                     size="sm"
+                    className="border-gray-300 hover:bg-gray-50"
                   >
                     <Upload className="mr-2 h-4 w-4" />
                     New Image
