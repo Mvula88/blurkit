@@ -2,12 +2,14 @@
 
 import { useRef, useEffect, useState, useCallback } from 'react';
 import { Card } from '@/components/ui/card';
-import type { Tool, BlurRegion } from '@/types';
+import type { Tool, BlurRegion, BlurType } from '@/types';
 
 interface BlurCanvasProps {
   image: string;
   tool: Tool;
   blurIntensity: number;
+  blurType: BlurType;
+  fillColor: string;
   blurRegions: BlurRegion[];
   selectedRegionId: string | null;
   onAddBlurRegion: (region: BlurRegion) => void;
@@ -20,6 +22,8 @@ export function BlurCanvas({
   image,
   tool,
   blurIntensity,
+  blurType,
+  fillColor,
   blurRegions,
   selectedRegionId,
   onAddBlurRegion,
@@ -105,40 +109,113 @@ export function BlurCanvas({
       isSelected: boolean
     ) => {
       ctx.save();
-      ctx.filter = `blur(${region.blurIntensity}px)`;
 
-      if (region.type === 'rectangle') {
-        const width = region.endX - region.startX;
-        const height = region.endY - region.startY;
+      const width = region.endX - region.startX;
+      const height = region.endY - region.startY;
+      const scaleX = canvas.width / img.width;
+      const scaleY = canvas.height / img.height;
 
-        // Scale coordinates from image to canvas
-        const scaleX = canvas.width / img.width;
-        const scaleY = canvas.height / img.height;
+      if (region.blurType === 'solid') {
+        // Fill with solid color
+        ctx.fillStyle = region.fillColor;
 
-        ctx.drawImage(
-          img,
-          region.startX / scaleX,
-          region.startY / scaleY,
-          width / scaleX,
-          height / scaleY,
-          region.startX,
-          region.startY,
-          width,
-          height
-        );
-      } else if (region.type === 'circle') {
-        const centerX = (region.startX + region.endX) / 2;
-        const centerY = (region.startY + region.endY) / 2;
-        const radius =
-          Math.sqrt(
-            Math.pow(region.endX - region.startX, 2) +
-              Math.pow(region.endY - region.startY, 2)
-          ) / 2;
+        if (region.type === 'rectangle') {
+          ctx.fillRect(region.startX, region.startY, width, height);
+        } else if (region.type === 'circle') {
+          const centerX = (region.startX + region.endX) / 2;
+          const centerY = (region.startY + region.endY) / 2;
+          const radius =
+            Math.sqrt(
+              Math.pow(region.endX - region.startX, 2) +
+                Math.pow(region.endY - region.startY, 2)
+            ) / 2;
+          ctx.beginPath();
+          ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      } else if (region.blurType === 'pixelate') {
+        // Pixelate effect
+        const pixelSize = region.blurIntensity;
 
-        ctx.beginPath();
-        ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
-        ctx.clip();
-        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        if (region.type === 'rectangle') {
+          for (let y = region.startY; y < region.endY; y += pixelSize) {
+            for (let x = region.startX; x < region.endX; x += pixelSize) {
+              const sourceX = x / scaleX;
+              const sourceY = y / scaleY;
+              const tempCanvas = document.createElement('canvas');
+              const tempCtx = tempCanvas.getContext('2d');
+              if (!tempCtx) continue;
+
+              tempCanvas.width = 1;
+              tempCanvas.height = 1;
+              tempCtx.drawImage(img, sourceX, sourceY, 1, 1, 0, 0, 1, 1);
+              const pixelData = tempCtx.getImageData(0, 0, 1, 1).data;
+
+              ctx.fillStyle = `rgb(${pixelData[0]}, ${pixelData[1]}, ${pixelData[2]})`;
+              ctx.fillRect(x, y, pixelSize, pixelSize);
+            }
+          }
+        } else if (region.type === 'circle') {
+          const centerX = (region.startX + region.endX) / 2;
+          const centerY = (region.startY + region.endY) / 2;
+          const radius =
+            Math.sqrt(
+              Math.pow(region.endX - region.startX, 2) +
+                Math.pow(region.endY - region.startY, 2)
+            ) / 2;
+
+          ctx.beginPath();
+          ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+          ctx.clip();
+
+          for (let y = region.startY; y < region.endY; y += pixelSize) {
+            for (let x = region.startX; x < region.endX; x += pixelSize) {
+              const sourceX = x / scaleX;
+              const sourceY = y / scaleY;
+              const tempCanvas = document.createElement('canvas');
+              const tempCtx = tempCanvas.getContext('2d');
+              if (!tempCtx) continue;
+
+              tempCanvas.width = 1;
+              tempCanvas.height = 1;
+              tempCtx.drawImage(img, sourceX, sourceY, 1, 1, 0, 0, 1, 1);
+              const pixelData = tempCtx.getImageData(0, 0, 1, 1).data;
+
+              ctx.fillStyle = `rgb(${pixelData[0]}, ${pixelData[1]}, ${pixelData[2]})`;
+              ctx.fillRect(x, y, pixelSize, pixelSize);
+            }
+          }
+        }
+      } else {
+        // Gaussian blur (default)
+        ctx.filter = `blur(${region.blurIntensity}px)`;
+
+        if (region.type === 'rectangle') {
+          ctx.drawImage(
+            img,
+            region.startX / scaleX,
+            region.startY / scaleY,
+            width / scaleX,
+            height / scaleY,
+            region.startX,
+            region.startY,
+            width,
+            height
+          );
+        } else if (region.type === 'circle') {
+          const centerX = (region.startX + region.endX) / 2;
+          const centerY = (region.startY + region.endY) / 2;
+          const radius =
+            Math.sqrt(
+              Math.pow(region.endX - region.startX, 2) +
+                Math.pow(region.endY - region.startY, 2)
+            ) / 2;
+
+          ctx.beginPath();
+          ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+          ctx.clip();
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        }
       }
 
       ctx.restore();
@@ -442,6 +519,8 @@ export function BlurCanvas({
           endX: Math.max(startPos.x, currentPos.x),
           endY: Math.max(startPos.y, currentPos.y),
           blurIntensity: blurIntensity,
+          blurType: blurType,
+          fillColor: fillColor,
         };
 
         onAddBlurRegion(newRegion);

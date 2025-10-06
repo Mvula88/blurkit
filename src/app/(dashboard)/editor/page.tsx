@@ -10,13 +10,15 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Download, Save, Upload } from 'lucide-react';
 import { toast } from 'sonner';
-import type { Tool, BlurRegion } from '@/types';
+import type { Tool, BlurRegion, BlurType } from '@/types';
 
 export default function EditorPage() {
   const { user } = useAuth();
   const [image, setImage] = useState<string | null>(null);
   const [tool, setTool] = useState<Tool>('rectangle');
   const [blurIntensity, setBlurIntensity] = useState(10);
+  const [blurType, setBlurType] = useState<BlurType>('gaussian');
+  const [fillColor, setFillColor] = useState('#ffffff');
   const [blurRegions, setBlurRegions] = useState<BlurRegion[]>([]);
   const [selectedRegionId, setSelectedRegionId] = useState<string | null>(null);
   const [canvasScale, setCanvasScale] = useState(1);
@@ -106,39 +108,103 @@ export default function EditorPage() {
       // Apply blur regions
       blurRegions.forEach((region) => {
         ctx.save();
-        ctx.filter = `blur(${region.blurIntensity}px)`;
 
         // Scale coordinates from canvas to original image size
         const startX = region.startX * scale;
         const startY = region.startY * scale;
         const endX = region.endX * scale;
         const endY = region.endY * scale;
+        const width = endX - startX;
+        const height = endY - startY;
 
-        if (region.type === 'rectangle') {
-          const width = endX - startX;
-          const height = endY - startY;
-          ctx.drawImage(
-            img,
-            startX,
-            startY,
-            width,
-            height,
-            startX,
-            startY,
-            width,
-            height
-          );
-        } else if (region.type === 'circle') {
-          const centerX = (startX + endX) / 2;
-          const centerY = (startY + endY) / 2;
-          const radius =
-            Math.sqrt(Math.pow(endX - startX, 2) + Math.pow(endY - startY, 2)) /
-            2;
+        if (region.blurType === 'solid') {
+          // Fill with solid color
+          ctx.fillStyle = region.fillColor;
 
-          ctx.beginPath();
-          ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
-          ctx.clip();
-          ctx.drawImage(img, 0, 0);
+          if (region.type === 'rectangle') {
+            ctx.fillRect(startX, startY, width, height);
+          } else if (region.type === 'circle') {
+            const centerX = (startX + endX) / 2;
+            const centerY = (startY + endY) / 2;
+            const radius =
+              Math.sqrt(Math.pow(endX - startX, 2) + Math.pow(endY - startY, 2)) / 2;
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+            ctx.fill();
+          }
+        } else if (region.blurType === 'pixelate') {
+          // Pixelate effect
+          const pixelSize = region.blurIntensity * scale;
+
+          if (region.type === 'rectangle') {
+            for (let y = startY; y < endY; y += pixelSize) {
+              for (let x = startX; x < endX; x += pixelSize) {
+                const tempCanvas = document.createElement('canvas');
+                const tempCtx = tempCanvas.getContext('2d');
+                if (!tempCtx) continue;
+
+                tempCanvas.width = 1;
+                tempCanvas.height = 1;
+                tempCtx.drawImage(img, x, y, 1, 1, 0, 0, 1, 1);
+                const pixelData = tempCtx.getImageData(0, 0, 1, 1).data;
+
+                ctx.fillStyle = `rgb(${pixelData[0]}, ${pixelData[1]}, ${pixelData[2]})`;
+                ctx.fillRect(x, y, pixelSize, pixelSize);
+              }
+            }
+          } else if (region.type === 'circle') {
+            const centerX = (startX + endX) / 2;
+            const centerY = (startY + endY) / 2;
+            const radius =
+              Math.sqrt(Math.pow(endX - startX, 2) + Math.pow(endY - startY, 2)) / 2;
+
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+            ctx.clip();
+
+            for (let y = startY; y < endY; y += pixelSize) {
+              for (let x = startX; x < endX; x += pixelSize) {
+                const tempCanvas = document.createElement('canvas');
+                const tempCtx = tempCanvas.getContext('2d');
+                if (!tempCtx) continue;
+
+                tempCanvas.width = 1;
+                tempCanvas.height = 1;
+                tempCtx.drawImage(img, x, y, 1, 1, 0, 0, 1, 1);
+                const pixelData = tempCtx.getImageData(0, 0, 1, 1).data;
+
+                ctx.fillStyle = `rgb(${pixelData[0]}, ${pixelData[1]}, ${pixelData[2]})`;
+                ctx.fillRect(x, y, pixelSize, pixelSize);
+              }
+            }
+          }
+        } else {
+          // Gaussian blur (default)
+          ctx.filter = `blur(${region.blurIntensity}px)`;
+
+          if (region.type === 'rectangle') {
+            ctx.drawImage(
+              img,
+              startX,
+              startY,
+              width,
+              height,
+              startX,
+              startY,
+              width,
+              height
+            );
+          } else if (region.type === 'circle') {
+            const centerX = (startX + endX) / 2;
+            const centerY = (startY + endY) / 2;
+            const radius =
+              Math.sqrt(Math.pow(endX - startX, 2) + Math.pow(endY - startY, 2)) / 2;
+
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+            ctx.clip();
+            ctx.drawImage(img, 0, 0, img.width, img.height);
+          }
         }
 
         ctx.restore();
@@ -238,6 +304,8 @@ export default function EditorPage() {
                 image={image}
                 tool={tool}
                 blurIntensity={blurIntensity}
+                blurType={blurType}
+                fillColor={fillColor}
                 blurRegions={blurRegions}
                 selectedRegionId={selectedRegionId}
                 onAddBlurRegion={handleAddBlurRegion}
@@ -253,6 +321,10 @@ export default function EditorPage() {
                 onToolChange={setTool}
                 blurIntensity={blurIntensity}
                 onBlurIntensityChange={setBlurIntensity}
+                blurType={blurType}
+                onBlurTypeChange={setBlurType}
+                fillColor={fillColor}
+                onFillColorChange={setFillColor}
                 blurRegions={blurRegions}
                 onRemoveBlurRegion={handleRemoveBlurRegion}
                 onClearAll={handleClearAll}

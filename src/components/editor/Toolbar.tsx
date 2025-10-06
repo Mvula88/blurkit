@@ -12,13 +12,24 @@ import {
   Undo,
   Redo,
 } from 'lucide-react';
-import type { Tool, BlurRegion } from '@/types';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import type { Tool, BlurRegion, BlurType } from '@/types';
 
 interface ToolbarProps {
   tool: Tool;
   onToolChange: (tool: Tool) => void;
   blurIntensity: number;
   onBlurIntensityChange: (intensity: number) => void;
+  blurType: BlurType;
+  onBlurTypeChange: (type: BlurType) => void;
+  fillColor: string;
+  onFillColorChange: (color: string) => void;
   blurRegions: BlurRegion[];
   onRemoveBlurRegion: (id: string) => void;
   onClearAll: () => void;
@@ -33,6 +44,10 @@ export function Toolbar({
   onToolChange,
   blurIntensity,
   onBlurIntensityChange,
+  blurType,
+  onBlurTypeChange,
+  fillColor,
+  onFillColorChange,
   blurRegions,
   onRemoveBlurRegion,
   onClearAll,
@@ -112,19 +127,56 @@ export function Toolbar({
           </div>
 
           <div className="space-y-2">
-            <Label className="font-semibold">
-              Blur Intensity:{' '}
-              <span className="text-blue-600">{blurIntensity}px</span>
-            </Label>
-            <Slider
-              value={[blurIntensity]}
-              onValueChange={(value) => onBlurIntensityChange(value[0])}
-              min={5}
-              max={50}
-              step={1}
-              className="cursor-pointer"
-            />
+            <Label className="font-semibold">Blur Type</Label>
+            <Select value={blurType} onValueChange={onBlurTypeChange}>
+              <SelectTrigger className="border-blue-200 hover:bg-blue-50">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="gaussian">Gaussian Blur</SelectItem>
+                <SelectItem value="pixelate">Pixelate</SelectItem>
+                <SelectItem value="solid">Solid Color</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
+
+          {blurType === 'solid' && (
+            <div className="space-y-2">
+              <Label className="font-semibold">Fill Color</Label>
+              <div className="flex gap-2">
+                <input
+                  type="color"
+                  value={fillColor}
+                  onChange={(e) => onFillColorChange(e.target.value)}
+                  className="h-10 w-full rounded-md border border-blue-200 cursor-pointer"
+                />
+                <input
+                  type="text"
+                  value={fillColor}
+                  onChange={(e) => onFillColorChange(e.target.value)}
+                  className="h-10 w-20 rounded-md border border-blue-200 px-2 text-sm"
+                  placeholder="#000000"
+                />
+              </div>
+            </div>
+          )}
+
+          {(blurType === 'gaussian' || blurType === 'pixelate') && (
+            <div className="space-y-2">
+              <Label className="font-semibold">
+                {blurType === 'gaussian' ? 'Blur' : 'Pixel'} Intensity:{' '}
+                <span className="text-blue-600">{blurIntensity}px</span>
+              </Label>
+              <Slider
+                value={[blurIntensity]}
+                onValueChange={(value) => onBlurIntensityChange(value[0])}
+                min={5}
+                max={50}
+                step={1}
+                className="cursor-pointer"
+              />
+            </div>
+          )}
         </CardContent>
       </Card>
 

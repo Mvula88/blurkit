@@ -1,3 +1,5 @@
+export type BlurType = 'gaussian' | 'pixelate' | 'solid';
+
 export interface BlurRegion {
   id: string;
   type: 'rectangle' | 'circle';
@@ -6,6 +8,8 @@ export interface BlurRegion {
   endX: number;
   endY: number;
   blurIntensity: number;
+  blurType: BlurType;
+  fillColor: string;
 }
 
 export interface Project {
