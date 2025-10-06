@@ -170,11 +170,14 @@ export default async function DashboardPage() {
                   )}
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-muted-foreground font-medium">
-                      {new Date(project.created_at).toLocaleDateString('en-US', {
-                        month: 'short',
-                        day: 'numeric',
-                        year: 'numeric',
-                      })}
+                      {new Date(project.created_at).toLocaleDateString(
+                        'en-US',
+                        {
+                          month: 'short',
+                          day: 'numeric',
+                          year: 'numeric',
+                        }
+                      )}
                     </span>
                     <Link href={`/editor?project=${project.id}`}>
                       <Button

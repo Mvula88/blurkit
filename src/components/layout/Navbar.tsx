@@ -96,7 +96,10 @@ export function Navbar({ user }: NavbarProps) {
             ) : (
               <>
                 <Link href="/login">
-                  <Button variant="ghost" className="hover:bg-blue-50 hover:text-blue-700">
+                  <Button
+                    variant="ghost"
+                    className="hover:bg-blue-50 hover:text-blue-700"
+                  >
                     Sign In
                   </Button>
                 </Link>

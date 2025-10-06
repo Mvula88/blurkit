@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import {
   ImageIcon,
@@ -34,9 +33,9 @@ export default function Home() {
 
             <p className="text-lg sm:text-xl text-blue-100 max-w-3xl leading-relaxed">
               Transform sensitive data into secure, shareable images. Get
-              real-time blur editing for protection of personal information, plus a
-              suite of tools for optimizing privacy. All without changing your
-              existing workflow.
+              real-time blur editing for protection of personal information,
+              plus a suite of tools for optimizing privacy. All without changing
+              your existing workflow.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 mt-8">
@@ -135,8 +134,8 @@ export default function Home() {
             </div>
             <h3 className="text-xl font-bold mb-3">Drag & Resize</h3>
             <p className="text-muted-foreground leading-relaxed">
-              Easily move and resize blur regions with intuitive handles. Undo and
-              redo support included.
+              Easily move and resize blur regions with intuitive handles. Undo
+              and redo support included.
             </p>
           </div>
 
