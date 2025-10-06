@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { Navbar } from '@/components/layout/Navbar';
 import { ImageUpload } from '@/components/editor/ImageUpload';
 import { BlurCanvas } from '@/components/editor/BlurCanvas';
@@ -14,22 +14,66 @@ export default function EditorPage() {
   const [tool, setTool] = useState<Tool>('rectangle');
   const [blurIntensity, setBlurIntensity] = useState(10);
   const [blurRegions, setBlurRegions] = useState<BlurRegion[]>([]);
+  const [selectedRegionId, setSelectedRegionId] = useState<string | null>(null);
+
+  // History for undo/redo
+  const [history, setHistory] = useState<BlurRegion[][]>([[]]);
+  const [historyIndex, setHistoryIndex] = useState(0);
 
   const handleImageUpload = (imageData: string) => {
     setImage(imageData);
     setBlurRegions([]);
+    setHistory([[]]);
+    setHistoryIndex(0);
+    setSelectedRegionId(null);
   };
 
+  const updateHistory = useCallback((newRegions: BlurRegion[]) => {
+    const newHistory = history.slice(0, historyIndex + 1);
+    newHistory.push(newRegions);
+    setHistory(newHistory);
+    setHistoryIndex(newHistory.length - 1);
+    setBlurRegions(newRegions);
+  }, [history, historyIndex]);
+
   const handleAddBlurRegion = (region: BlurRegion) => {
-    setBlurRegions([...blurRegions, region]);
+    updateHistory([...blurRegions, region]);
+  };
+
+  const handleUpdateBlurRegion = (id: string, updates: Partial<BlurRegion>) => {
+    const newRegions = blurRegions.map((region) =>
+      region.id === id ? { ...region, ...updates } : region
+    );
+    updateHistory(newRegions);
   };
 
   const handleRemoveBlurRegion = (id: string) => {
-    setBlurRegions(blurRegions.filter((region) => region.id !== id));
+    const newRegions = blurRegions.filter((region) => region.id !== id);
+    updateHistory(newRegions);
+    if (selectedRegionId === id) {
+      setSelectedRegionId(null);
+    }
   };
 
   const handleClearAll = () => {
-    setBlurRegions([]);
+    updateHistory([]);
+    setSelectedRegionId(null);
+  };
+
+  const handleUndo = () => {
+    if (historyIndex > 0) {
+      setHistoryIndex(historyIndex - 1);
+      setBlurRegions(history[historyIndex - 1]);
+      setSelectedRegionId(null);
+    }
+  };
+
+  const handleRedo = () => {
+    if (historyIndex < history.length - 1) {
+      setHistoryIndex(historyIndex + 1);
+      setBlurRegions(history[historyIndex + 1]);
+      setSelectedRegionId(null);
+    }
   };
 
   return (
@@ -55,8 +99,10 @@ export default function EditorPage() {
                 tool={tool}
                 blurIntensity={blurIntensity}
                 blurRegions={blurRegions}
+                selectedRegionId={selectedRegionId}
                 onAddBlurRegion={handleAddBlurRegion}
-                onRemoveBlurRegion={handleRemoveBlurRegion}
+                onUpdateBlurRegion={handleUpdateBlurRegion}
+                onSelectRegion={setSelectedRegionId}
               />
             </div>
 
@@ -67,8 +113,13 @@ export default function EditorPage() {
                 blurIntensity={blurIntensity}
                 onBlurIntensityChange={setBlurIntensity}
                 blurRegions={blurRegions}
+                selectedRegionId={selectedRegionId}
                 onRemoveBlurRegion={handleRemoveBlurRegion}
                 onClearAll={handleClearAll}
+                onUndo={handleUndo}
+                onRedo={handleRedo}
+                canUndo={historyIndex > 0}
+                canRedo={historyIndex < history.length - 1}
                 onNewImage={() => setImage(null)}
                 image={image}
                 user={user}

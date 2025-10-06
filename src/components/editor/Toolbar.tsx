@@ -4,7 +4,17 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
-import { Square, Circle, Trash2, Download, Save, Upload } from 'lucide-react';
+import {
+  Square,
+  Circle,
+  Trash2,
+  Download,
+  Save,
+  Upload,
+  MousePointer2,
+  Undo,
+  Redo,
+} from 'lucide-react';
 import type { Tool, BlurRegion } from '@/types';
 import type { User } from '@supabase/supabase-js';
 import { toast } from 'sonner';
@@ -15,8 +25,13 @@ interface ToolbarProps {
   blurIntensity: number;
   onBlurIntensityChange: (intensity: number) => void;
   blurRegions: BlurRegion[];
+  selectedRegionId: string | null;
   onRemoveBlurRegion: (id: string) => void;
   onClearAll: () => void;
+  onUndo: () => void;
+  onRedo: () => void;
+  canUndo: boolean;
+  canRedo: boolean;
   onNewImage: () => void;
   image: string;
   user: User | null;
@@ -28,8 +43,13 @@ export function Toolbar({
   blurIntensity,
   onBlurIntensityChange,
   blurRegions,
+  selectedRegionId,
   onRemoveBlurRegion,
   onClearAll,
+  onUndo,
+  onRedo,
+  canUndo,
+  canRedo,
   onNewImage,
   image,
   user,
@@ -118,7 +138,15 @@ export function Toolbar({
           <CardTitle>Tools</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-3 gap-2">
+            <Button
+              variant={tool === 'select' ? 'default' : 'outline'}
+              onClick={() => onToolChange('select')}
+              className="w-full"
+            >
+              <MousePointer2 className="mr-2 h-4 w-4" />
+              Select
+            </Button>
             <Button
               variant={tool === 'rectangle' ? 'default' : 'outline'}
               onClick={() => onToolChange('rectangle')}
@@ -134,6 +162,27 @@ export function Toolbar({
             >
               <Circle className="mr-2 h-4 w-4" />
               Circle
+            </Button>
+          </div>
+
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              onClick={onUndo}
+              disabled={!canUndo}
+              className="flex-1"
+            >
+              <Undo className="mr-2 h-4 w-4" />
+              Undo
+            </Button>
+            <Button
+              variant="outline"
+              onClick={onRedo}
+              disabled={!canRedo}
+              className="flex-1"
+            >
+              <Redo className="mr-2 h-4 w-4" />
+              Redo
             </Button>
           </div>
 
