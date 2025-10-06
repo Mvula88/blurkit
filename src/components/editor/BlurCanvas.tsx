@@ -25,7 +25,7 @@ export function BlurCanvas({
   const [startPos, setStartPos] = useState({ x: 0, y: 0 });
   const [currentPos, setCurrentPos] = useState({ x: 0, y: 0 });
   const [imageLoaded, setImageLoaded] = useState(false);
-  const imageRef = useRef<HTMLImageElement>();
+  const imageRef = useRef<HTMLImageElement | null>(null);
 
   const drawBlurRegion = useCallback(
     (
