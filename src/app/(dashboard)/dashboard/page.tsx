@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import { Navbar } from '@/components/layout/Navbar';
@@ -69,11 +70,12 @@ export default async function DashboardPage() {
                 </CardHeader>
                 <CardContent>
                   {project.original_image_url ? (
-                    <div className="aspect-video bg-muted rounded-md mb-4 overflow-hidden">
-                      <img
+                    <div className="aspect-video bg-muted rounded-md mb-4 overflow-hidden relative">
+                      <Image
                         src={project.original_image_url}
                         alt={project.name}
-                        className="w-full h-full object-cover"
+                        fill
+                        className="object-cover"
                       />
                     </div>
                   ) : (

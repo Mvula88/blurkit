@@ -32,7 +32,7 @@ export function LoginForm() {
         router.push('/dashboard');
         router.refresh();
       }
-    } catch (error) {
+    } catch {
       toast.error('An error occurred. Please try again.');
     } finally {
       setLoading(false);

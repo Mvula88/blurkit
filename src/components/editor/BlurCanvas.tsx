@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, useState, useCallback } from 'react';
 import { Card } from '@/components/ui/card';
 import type { Tool, BlurRegion } from '@/types';
 
@@ -27,37 +27,77 @@ export function BlurCanvas({
   const [imageLoaded, setImageLoaded] = useState(false);
   const imageRef = useRef<HTMLImageElement>();
 
-  // Load and draw image
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
+  const drawBlurRegion = useCallback(
+    (
+      ctx: CanvasRenderingContext2D,
+      region: BlurRegion,
+      canvas: HTMLCanvasElement,
+      img: HTMLImageElement
+    ) => {
+      ctx.save();
+      ctx.filter = `blur(${region.blurIntensity}px)`;
 
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
+      if (region.type === 'rectangle') {
+        const width = region.endX - region.startX;
+        const height = region.endY - region.startY;
 
-    const img = new Image();
-    img.onload = () => {
-      // Set canvas size to match image
-      const maxWidth = canvas.parentElement?.clientWidth || 800;
-      const scale = Math.min(1, maxWidth / img.width);
-      canvas.width = img.width * scale;
-      canvas.height = img.height * scale;
+        // Scale coordinates from image to canvas
+        const scaleX = canvas.width / img.width;
+        const scaleY = canvas.height / img.height;
 
-      imageRef.current = img;
-      setImageLoaded(true);
-      redrawCanvas();
-    };
-    img.src = image;
-  }, [image]);
+        ctx.drawImage(
+          img,
+          region.startX / scaleX,
+          region.startY / scaleY,
+          width / scaleX,
+          height / scaleY,
+          region.startX,
+          region.startY,
+          width,
+          height
+        );
+      } else if (region.type === 'circle') {
+        const centerX = (region.startX + region.endX) / 2;
+        const centerY = (region.startY + region.endY) / 2;
+        const radius =
+          Math.sqrt(
+            Math.pow(region.endX - region.startX, 2) +
+              Math.pow(region.endY - region.startY, 2)
+          ) / 2;
 
-  // Redraw canvas when blur regions change
-  useEffect(() => {
-    if (imageLoaded) {
-      redrawCanvas();
-    }
-  }, [blurRegions, imageLoaded]);
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+        ctx.clip();
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      }
 
-  const redrawCanvas = () => {
+      ctx.restore();
+
+      // Draw outline
+      ctx.strokeStyle = '#3b82f6';
+      ctx.lineWidth = 2;
+
+      if (region.type === 'rectangle') {
+        const width = region.endX - region.startX;
+        const height = region.endY - region.startY;
+        ctx.strokeRect(region.startX, region.startY, width, height);
+      } else if (region.type === 'circle') {
+        const centerX = (region.startX + region.endX) / 2;
+        const centerY = (region.startY + region.endY) / 2;
+        const radius =
+          Math.sqrt(
+            Math.pow(region.endX - region.startX, 2) +
+              Math.pow(region.endY - region.startY, 2)
+          ) / 2;
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+    },
+    []
+  );
+
+  const redrawCanvas = useCallback(() => {
     const canvas = canvasRef.current;
     const img = imageRef.current;
     if (!canvas || !img) return;
@@ -101,74 +141,37 @@ export function BlurCanvas({
 
       ctx.setLineDash([]);
     }
-  };
+  }, [blurRegions, isDrawing, tool, startPos, currentPos, drawBlurRegion]);
 
-  const drawBlurRegion = (
-    ctx: CanvasRenderingContext2D,
-    region: BlurRegion,
-    canvas: HTMLCanvasElement,
-    img: HTMLImageElement
-  ) => {
-    ctx.save();
-    ctx.filter = `blur(${region.blurIntensity}px)`;
+  // Load and draw image
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
 
-    if (region.type === 'rectangle') {
-      const width = region.endX - region.startX;
-      const height = region.endY - region.startY;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
 
-      // Scale coordinates from image to canvas
-      const scaleX = canvas.width / img.width;
-      const scaleY = canvas.height / img.height;
+    const img = new Image();
+    img.onload = () => {
+      // Set canvas size to match image
+      const maxWidth = canvas.parentElement?.clientWidth || 800;
+      const scale = Math.min(1, maxWidth / img.width);
+      canvas.width = img.width * scale;
+      canvas.height = img.height * scale;
 
-      ctx.drawImage(
-        img,
-        region.startX / scaleX,
-        region.startY / scaleY,
-        width / scaleX,
-        height / scaleY,
-        region.startX,
-        region.startY,
-        width,
-        height
-      );
-    } else if (region.type === 'circle') {
-      const centerX = (region.startX + region.endX) / 2;
-      const centerY = (region.startY + region.endY) / 2;
-      const radius =
-        Math.sqrt(
-          Math.pow(region.endX - region.startX, 2) +
-            Math.pow(region.endY - region.startY, 2)
-        ) / 2;
+      imageRef.current = img;
+      setImageLoaded(true);
+      redrawCanvas();
+    };
+    img.src = image;
+  }, [image, redrawCanvas]);
 
-      ctx.beginPath();
-      ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
-      ctx.clip();
-      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+  // Redraw canvas when blur regions change
+  useEffect(() => {
+    if (imageLoaded) {
+      redrawCanvas();
     }
-
-    ctx.restore();
-
-    // Draw outline
-    ctx.strokeStyle = '#3b82f6';
-    ctx.lineWidth = 2;
-
-    if (region.type === 'rectangle') {
-      const width = region.endX - region.startX;
-      const height = region.endY - region.startY;
-      ctx.strokeRect(region.startX, region.startY, width, height);
-    } else if (region.type === 'circle') {
-      const centerX = (region.startX + region.endX) / 2;
-      const centerY = (region.startY + region.endY) / 2;
-      const radius =
-        Math.sqrt(
-          Math.pow(region.endX - region.startX, 2) +
-            Math.pow(region.endY - region.startY, 2)
-        ) / 2;
-      ctx.beginPath();
-      ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
-      ctx.stroke();
-    }
-  };
+  }, [blurRegions, imageLoaded, redrawCanvas]);
 
   const getMousePos = (e: React.MouseEvent<HTMLCanvasElement>) => {
     const canvas = canvasRef.current;
@@ -203,14 +206,6 @@ export function BlurCanvas({
 
     // Only create region if it's large enough
     if (width > 10 && height > 10) {
-      const canvas = canvasRef.current;
-      const img = imageRef.current;
-      if (!canvas || !img) return;
-
-      // Scale coordinates from canvas to image
-      const scaleX = img.width / canvas.width;
-      const scaleY = img.height / canvas.height;
-
       const newRegion: BlurRegion = {
         id: `region-${Date.now()}`,
         type: tool as 'rectangle' | 'circle',
