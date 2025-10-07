@@ -1,7 +1,7 @@
 'use client';
 
 import { jsPDF } from 'jspdf';
-import type { PDFPage, BlurRegion } from '@/types';
+import type { PDFPage } from '@/types';
 
 export async function exportPDFWithBlur(
   pages: PDFPage[],

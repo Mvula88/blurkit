@@ -10,16 +10,16 @@ import {
   ZoomOut,
   RotateCcw,
 } from 'lucide-react';
-import type { PDFPage, BlurRegion } from '@/types';
+import type { PDFPage, BlurRegion, Tool, BlurType } from '@/types';
 import { BlurCanvas } from './BlurCanvas';
 
 interface PDFViewerProps {
   pages: PDFPage[];
   currentPage: number;
   onPageChange: (page: number) => void;
-  tool: any;
+  tool: Tool;
   blurIntensity: number;
-  blurType: any;
+  blurType: BlurType;
   fillColor: string;
   onAddBlurRegion: (region: BlurRegion) => void;
   onUpdateBlurRegion: (id: string, updates: Partial<BlurRegion>) => void;

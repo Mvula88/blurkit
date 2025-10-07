@@ -33,7 +33,7 @@ export default function EditorPage() {
   const [history, setHistory] = useState<BlurRegion[][]>([[]]);
   const [historyIndex, setHistoryIndex] = useState(0);
 
-  const handleImageUpload = (imageData: string) => {
+  const handleImageUpload = useCallback((imageData: string) => {
     setFileType('image');
     setImage(imageData);
     setPdfPages([]);
@@ -42,7 +42,7 @@ export default function EditorPage() {
     setHistoryIndex(0);
     setSelectedRegionId(null);
     setCurrentPage(1);
-  };
+  }, []);
 
   const handlePDFUpload = async (file: File) => {
     try {
