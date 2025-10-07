@@ -1,20 +1,26 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { Navbar } from '@/components/layout/Navbar';
 import { ImageUpload } from '@/components/editor/ImageUpload';
 import { BlurCanvas } from '@/components/editor/BlurCanvas';
+import { PDFViewer } from '@/components/editor/PDFViewer';
 import { Toolbar } from '@/components/editor/Toolbar';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Download, Save, Upload } from 'lucide-react';
 import { toast } from 'sonner';
-import type { Tool, BlurRegion, BlurType } from '@/types';
+import { loadPDFPages } from '@/lib/pdfUtils';
+import { exportPDFWithBlur } from '@/lib/pdfExport';
+import type { Tool, BlurRegion, BlurType, PDFPage, FileType } from '@/types';
 
 export default function EditorPage() {
   const { user } = useAuth();
   const [image, setImage] = useState<string | null>(null);
+  const [fileType, setFileType] = useState<FileType>('image');
+  const [pdfPages, setPdfPages] = useState<PDFPage[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
   const [tool, setTool] = useState<Tool>('rectangle');
   const [blurIntensity, setBlurIntensity] = useState(10);
   const [blurType, setBlurType] = useState<BlurType>('gaussian');
@@ -28,11 +34,33 @@ export default function EditorPage() {
   const [historyIndex, setHistoryIndex] = useState(0);
 
   const handleImageUpload = (imageData: string) => {
+    setFileType('image');
     setImage(imageData);
+    setPdfPages([]);
     setBlurRegions([]);
     setHistory([[]]);
     setHistoryIndex(0);
     setSelectedRegionId(null);
+    setCurrentPage(1);
+  };
+
+  const handlePDFUpload = async (file: File) => {
+    try {
+      toast.info('Loading PDF...');
+      const pages = await loadPDFPages(file);
+      setFileType('pdf');
+      setPdfPages(pages);
+      setImage(null);
+      setBlurRegions([]);
+      setHistory([[]]);
+      setHistoryIndex(0);
+      setSelectedRegionId(null);
+      setCurrentPage(1);
+      toast.success(`PDF loaded with ${pages.length} pages`);
+    } catch (error) {
+      console.error('Error loading PDF:', error);
+      toast.error('Failed to load PDF');
+    }
   };
 
   const updateHistory = useCallback(
@@ -46,19 +74,48 @@ export default function EditorPage() {
     [history, historyIndex]
   );
 
+  const getCurrentBlurRegions = () => {
+    if (fileType === 'pdf' && pdfPages.length > 0) {
+      return pdfPages[currentPage - 1]?.blurRegions || [];
+    }
+    return blurRegions;
+  };
+
+  const updatePDFPageRegions = (newRegions: BlurRegion[]) => {
+    const updatedPages = pdfPages.map((page, index) =>
+      index === currentPage - 1 ? { ...page, blurRegions: newRegions } : page
+    );
+    setPdfPages(updatedPages);
+  };
+
   const handleAddBlurRegion = (region: BlurRegion) => {
-    updateHistory([...blurRegions, region]);
+    if (fileType === 'pdf') {
+      const currentRegions = getCurrentBlurRegions();
+      const newRegions = [...currentRegions, region];
+      updatePDFPageRegions(newRegions);
+      updateHistory(newRegions);
+    } else {
+      updateHistory([...blurRegions, region]);
+    }
   };
 
   const handleUpdateBlurRegion = (id: string, updates: Partial<BlurRegion>) => {
-    const newRegions = blurRegions.map((region) =>
+    const currentRegions = getCurrentBlurRegions();
+    const newRegions = currentRegions.map((region) =>
       region.id === id ? { ...region, ...updates } : region
     );
+    if (fileType === 'pdf') {
+      updatePDFPageRegions(newRegions);
+    }
     updateHistory(newRegions);
   };
 
   const handleRemoveBlurRegion = (id: string) => {
-    const newRegions = blurRegions.filter((region) => region.id !== id);
+    const currentRegions = getCurrentBlurRegions();
+    const newRegions = currentRegions.filter((region) => region.id !== id);
+    if (fileType === 'pdf') {
+      updatePDFPageRegions(newRegions);
+    }
     updateHistory(newRegions);
     if (selectedRegionId === id) {
       setSelectedRegionId(null);
@@ -66,6 +123,9 @@ export default function EditorPage() {
   };
 
   const handleClearAll = () => {
+    if (fileType === 'pdf') {
+      updatePDFPageRegions([]);
+    }
     updateHistory([]);
     setSelectedRegionId(null);
   };
@@ -73,7 +133,11 @@ export default function EditorPage() {
   const handleUndo = () => {
     if (historyIndex > 0) {
       setHistoryIndex(historyIndex - 1);
-      setBlurRegions(history[historyIndex - 1]);
+      const newRegions = history[historyIndex - 1];
+      if (fileType === 'pdf') {
+        updatePDFPageRegions(newRegions);
+      }
+      setBlurRegions(newRegions);
       setSelectedRegionId(null);
     }
   };
@@ -81,12 +145,37 @@ export default function EditorPage() {
   const handleRedo = () => {
     if (historyIndex < history.length - 1) {
       setHistoryIndex(historyIndex + 1);
-      setBlurRegions(history[historyIndex + 1]);
+      const newRegions = history[historyIndex + 1];
+      if (fileType === 'pdf') {
+        updatePDFPageRegions(newRegions);
+      }
+      setBlurRegions(newRegions);
       setSelectedRegionId(null);
     }
   };
 
-  const handleExport = () => {
+  const handlePageChange = (newPage: number) => {
+    setCurrentPage(newPage);
+    setSelectedRegionId(null);
+    const pageRegions = pdfPages[newPage - 1]?.blurRegions || [];
+    setBlurRegions(pageRegions);
+    setHistory([[...pageRegions]]);
+    setHistoryIndex(0);
+  };
+
+  const handleExport = async () => {
+    if (fileType === 'pdf' && pdfPages.length > 0) {
+      try {
+        toast.info('Exporting PDF...');
+        await exportPDFWithBlur(pdfPages, canvasScale);
+        toast.success('PDF exported successfully!');
+      } catch (error) {
+        console.error('Error exporting PDF:', error);
+        toast.error('Failed to export PDF');
+      }
+      return;
+    }
+
     if (!image) return;
 
     // Create a canvas to render the blurred image
@@ -241,6 +330,44 @@ export default function EditorPage() {
     // TODO: Implement save to Supabase
   };
 
+  // Handle clipboard paste for screenshots
+  useEffect(() => {
+    const handlePaste = async (e: ClipboardEvent) => {
+      const items = e.clipboardData?.items;
+      if (!items) return;
+
+      for (const item of Array.from(items)) {
+        if (item.type.startsWith('image/')) {
+          const file = item.getAsFile();
+          if (!file) continue;
+
+          // Validate file size (10MB limit)
+          if (file.size > 10 * 1024 * 1024) {
+            toast.error('Image size must be less than 10MB');
+            return;
+          }
+
+          const reader = new FileReader();
+          reader.onload = (event) => {
+            const result = event.target?.result as string;
+            handleImageUpload(result);
+            toast.success('Screenshot pasted successfully!');
+          };
+          reader.onerror = () => {
+            toast.error('Failed to read pasted image');
+          };
+          reader.readAsDataURL(file);
+          break;
+        }
+      }
+    };
+
+    document.addEventListener('paste', handlePaste);
+    return () => {
+      document.removeEventListener('paste', handlePaste);
+    };
+  }, [handleImageUpload]);
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
       <Navbar user={user} />
@@ -249,17 +376,17 @@ export default function EditorPage() {
         <div className="mb-8">
           <div className="flex items-center gap-2 mb-3">
             <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-              Image Editor
+              Image & PDF Editor
             </h1>
             <div className="h-2 w-2 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 animate-pulse" />
           </div>
           <p className="text-lg text-muted-foreground">
-            Upload an image and draw blur regions to protect sensitive
-            information
+            Upload an image or PDF, paste a screenshot (Ctrl+V), and draw blur
+            regions to protect sensitive information
           </p>
         </div>
 
-        {image && (
+        {(image || pdfPages.length > 0) && (
           <Card className="mb-6 border-blue-100 bg-gradient-to-r from-blue-50/50 to-indigo-50/50 shadow-sm">
             <CardContent className="p-5">
               <div className="flex items-center gap-4">
@@ -273,7 +400,7 @@ export default function EditorPage() {
                     className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-sm"
                   >
                     <Download className="mr-2 h-4 w-4" />
-                    Export Image
+                    {fileType === 'pdf' ? 'Export PDF' : 'Export Image'}
                   </Button>
                   {user && (
                     <Button
@@ -287,13 +414,17 @@ export default function EditorPage() {
                     </Button>
                   )}
                   <Button
-                    onClick={() => setImage(null)}
+                    onClick={() => {
+                      setImage(null);
+                      setPdfPages([]);
+                      setFileType('image');
+                    }}
                     variant="outline"
                     size="sm"
                     className="border-gray-300 hover:bg-gray-50"
                   >
                     <Upload className="mr-2 h-4 w-4" />
-                    New Image
+                    New File
                   </Button>
                 </div>
               </div>
@@ -301,24 +432,44 @@ export default function EditorPage() {
           </Card>
         )}
 
-        {!image ? (
-          <ImageUpload onImageUpload={handleImageUpload} />
+        {!image && pdfPages.length === 0 ? (
+          <ImageUpload
+            onImageUpload={handleImageUpload}
+            onPDFUpload={handlePDFUpload}
+          />
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-6">
             <div className="order-2 lg:order-1">
-              <BlurCanvas
-                image={image}
-                tool={tool}
-                blurIntensity={blurIntensity}
-                blurType={blurType}
-                fillColor={fillColor}
-                blurRegions={blurRegions}
-                selectedRegionId={selectedRegionId}
-                onAddBlurRegion={handleAddBlurRegion}
-                onUpdateBlurRegion={handleUpdateBlurRegion}
-                onSelectRegion={setSelectedRegionId}
-                onScaleChange={setCanvasScale}
-              />
+              {fileType === 'pdf' ? (
+                <PDFViewer
+                  pages={pdfPages}
+                  currentPage={currentPage}
+                  onPageChange={handlePageChange}
+                  tool={tool}
+                  blurIntensity={blurIntensity}
+                  blurType={blurType}
+                  fillColor={fillColor}
+                  onAddBlurRegion={handleAddBlurRegion}
+                  onUpdateBlurRegion={handleUpdateBlurRegion}
+                  onSelectRegion={setSelectedRegionId}
+                  selectedRegionId={selectedRegionId}
+                  onScaleChange={setCanvasScale}
+                />
+              ) : image ? (
+                <BlurCanvas
+                  image={image}
+                  tool={tool}
+                  blurIntensity={blurIntensity}
+                  blurType={blurType}
+                  fillColor={fillColor}
+                  blurRegions={blurRegions}
+                  selectedRegionId={selectedRegionId}
+                  onAddBlurRegion={handleAddBlurRegion}
+                  onUpdateBlurRegion={handleUpdateBlurRegion}
+                  onSelectRegion={setSelectedRegionId}
+                  onScaleChange={setCanvasScale}
+                />
+              ) : null}
             </div>
 
             <div className="order-1 lg:order-2">
@@ -331,7 +482,7 @@ export default function EditorPage() {
                 onBlurTypeChange={setBlurType}
                 fillColor={fillColor}
                 onFillColorChange={setFillColor}
-                blurRegions={blurRegions}
+                blurRegions={getCurrentBlurRegions()}
                 onRemoveBlurRegion={handleRemoveBlurRegion}
                 onClearAll={handleClearAll}
                 onUndo={handleUndo}

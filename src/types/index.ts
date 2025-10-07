@@ -1,4 +1,5 @@
 export type BlurType = 'gaussian' | 'pixelate' | 'solid';
+export type FileType = 'image' | 'pdf';
 
 export interface BlurRegion {
   id: string;
@@ -10,6 +11,14 @@ export interface BlurRegion {
   blurIntensity: number;
   blurType: BlurType;
   fillColor: string;
+}
+
+export interface PDFPage {
+  pageNumber: number;
+  imageData: string;
+  width: number;
+  height: number;
+  blurRegions: BlurRegion[];
 }
 
 export interface Project {
