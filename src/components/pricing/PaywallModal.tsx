@@ -29,7 +29,7 @@ export function PaywallModal({ open, onClose }: PaywallModalProps) {
             Unlock Unlimited Blurs
           </DialogTitle>
           <DialogDescription className="text-center text-base pt-2">
-            You&apos;ve reached your daily limit of 5 free blurs. Upgrade to
+            You&apos;ve reached your daily limit of 15 free blurs. Upgrade to
             Premium for unlimited access!
           </DialogDescription>
         </DialogHeader>
@@ -58,12 +58,12 @@ export function PaywallModal({ open, onClose }: PaywallModalProps) {
           <div className="border-t pt-4 mt-4">
             <div className="flex items-baseline justify-center gap-2 mb-4">
               <span className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-                $7
+                $4
               </span>
               <span className="text-gray-500">/month</span>
             </div>
             <p className="text-center text-sm text-gray-500 mb-4">
-              Or $49/year (save 41%)
+              Or $36/year (save 25%)
             </p>
           </div>
 

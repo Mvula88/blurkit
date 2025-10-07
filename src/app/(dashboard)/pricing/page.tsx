@@ -47,7 +47,7 @@ export default function PricingPage() {
 
   const features = {
     free: [
-      '5 blurs per day',
+      '15 blurs per day',
       'Basic blur types',
       'Image & PDF support',
       'Screenshot paste',
@@ -142,14 +142,14 @@ export default function PricingPage() {
                 <h3 className="text-2xl font-bold mb-2">Premium</h3>
                 <div className="mb-4">
                   <span className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-                    $7
+                    $4
                   </span>
                   <span className="text-gray-500">/month</span>
                 </div>
                 <p className="text-sm text-gray-600">
-                  Or $49/year{' '}
+                  Or $36/year{' '}
                   <span className="text-blue-600 font-semibold">
-                    (save 41%)
+                    (save 25%)
                   </span>
                 </p>
               </div>
@@ -193,7 +193,7 @@ export default function PricingPage() {
                 <h3 className="text-2xl font-bold mb-2">Lifetime</h3>
                 <div className="mb-4">
                   <span className="text-4xl font-bold bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">
-                    $99
+                    $79
                   </span>
                   <span className="text-gray-500">/once</span>
                 </div>

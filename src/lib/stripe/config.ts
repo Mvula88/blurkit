@@ -20,17 +20,17 @@ export const STRIPE_PLANS = {
 export const PLAN_DETAILS = {
   premium_monthly: {
     name: 'Premium Monthly',
-    price: 7,
+    price: 4,
     interval: 'month',
   },
   premium_yearly: {
     name: 'Premium Yearly',
-    price: 49,
+    price: 36,
     interval: 'year',
   },
   lifetime: {
     name: 'Lifetime Access',
-    price: 99,
+    price: 79,
     interval: 'one-time',
   },
 };

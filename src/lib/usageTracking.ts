@@ -3,7 +3,7 @@
 import type { UsageStats, UserTier } from '@/types';
 
 const STORAGE_KEY = 'blurkit_usage';
-const FREE_TIER_DAILY_LIMIT = 5;
+const FREE_TIER_DAILY_LIMIT = 15;
 
 export function getUsageStats(): UsageStats {
   if (typeof window === 'undefined') {
