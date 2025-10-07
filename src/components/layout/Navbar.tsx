@@ -10,7 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { ImageIcon, User, LogOut } from 'lucide-react';
+import { ImageIcon, User, LogOut, Sparkles } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { toast } from 'sonner';
 
@@ -50,6 +50,15 @@ export function Navbar({ user }: NavbarProps) {
           </Link>
 
           <div className="flex items-center gap-2">
+            <Link href="/pricing">
+              <Button
+                variant="ghost"
+                className="hover:bg-blue-50 hover:text-blue-700"
+              >
+                <Sparkles className="mr-2 h-4 w-4" />
+                Pricing
+              </Button>
+            </Link>
             {user ? (
               <>
                 <Link href="/dashboard">
