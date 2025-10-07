@@ -1,14 +1,16 @@
 'use client';
 
-import * as pdfjsLib from 'pdfjs-dist';
 import type { PDFPage } from '@/types';
 
-// Configure PDF.js worker
-if (typeof window !== 'undefined') {
-  pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
-}
-
 export async function loadPDFPages(file: File): Promise<PDFPage[]> {
+  // Dynamic import to avoid SSR issues
+  const pdfjsLib = await import('pdfjs-dist');
+
+  // Configure PDF.js worker
+  if (typeof window !== 'undefined') {
+    pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
+  }
+
   const arrayBuffer = await file.arrayBuffer();
   const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
   const pages: PDFPage[] = [];
