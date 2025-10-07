@@ -1,11 +1,13 @@
 'use client';
 
 import { jsPDF } from 'jspdf';
-import type { PDFPage } from '@/types';
+import type { PDFPage, UserTier } from '@/types';
+import { addWatermark, shouldAddWatermark } from './watermark';
 
 export async function exportPDFWithBlur(
   pages: PDFPage[],
-  canvasScale: number
+  canvasScale: number,
+  userTier: UserTier = 'free'
 ): Promise<void> {
   const pdf = new jsPDF({
     orientation: 'portrait',
@@ -142,6 +144,11 @@ export async function exportPDFWithBlur(
 
       ctx.restore();
     });
+
+    // Add watermark for free tier users
+    if (shouldAddWatermark(userTier)) {
+      addWatermark(canvas);
+    }
 
     // Add page to PDF
     const pageData = canvas.toDataURL('image/jpeg', 0.95);

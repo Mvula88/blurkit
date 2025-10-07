@@ -1,5 +1,6 @@
 export type BlurType = 'gaussian' | 'pixelate' | 'solid';
 export type FileType = 'image' | 'pdf';
+export type UserTier = 'free' | 'premium' | 'lifetime';
 
 export interface BlurRegion {
   id: string;
@@ -29,6 +30,21 @@ export interface Project {
   blur_regions: BlurRegion[];
   created_at: string;
   updated_at: string;
+}
+
+export interface UserProfile {
+  id: string;
+  email: string;
+  tier: UserTier;
+  subscription_id?: string;
+  subscription_status?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface UsageStats {
+  blursToday: number;
+  lastResetDate: string;
 }
 
 export type Tool = 'rectangle' | 'circle' | 'select';

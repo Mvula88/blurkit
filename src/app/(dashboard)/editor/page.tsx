@@ -6,6 +6,7 @@ import { ImageUpload } from '@/components/editor/ImageUpload';
 import { BlurCanvas } from '@/components/editor/BlurCanvas';
 import { PDFViewer } from '@/components/editor/PDFViewer';
 import { Toolbar } from '@/components/editor/Toolbar';
+import { PaywallModal } from '@/components/pricing/PaywallModal';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -13,13 +14,28 @@ import { Download, Save, Upload } from 'lucide-react';
 import { toast } from 'sonner';
 import { loadPDFPages } from '@/lib/pdfUtils';
 import { exportPDFWithBlur } from '@/lib/pdfExport';
-import type { Tool, BlurRegion, BlurType, PDFPage, FileType } from '@/types';
+import { addWatermark, shouldAddWatermark } from '@/lib/watermark';
+import {
+  canBlur,
+  incrementBlurCount,
+  getRemainingBlurs,
+} from '@/lib/usageTracking';
+import type {
+  Tool,
+  BlurRegion,
+  BlurType,
+  PDFPage,
+  FileType,
+  UserTier,
+} from '@/types';
 
 // Force dynamic rendering to avoid SSR issues with PDF.js
 export const dynamic = 'force-dynamic';
 
 export default function EditorPage() {
   const { user } = useAuth();
+  const [userTier, setUserTier] = useState<UserTier>('free');
+  const [showPaywall, setShowPaywall] = useState(false);
   const [image, setImage] = useState<string | null>(null);
   const [fileType, setFileType] = useState<FileType>('image');
   const [pdfPages, setPdfPages] = useState<PDFPage[]>([]);
@@ -94,6 +110,26 @@ export default function EditorPage() {
   };
 
   const handleAddBlurRegion = (region: BlurRegion) => {
+    // Check usage limits for free tier
+    if (!canBlur(userTier)) {
+      setShowPaywall(true);
+      toast.error(
+        'Daily blur limit reached! Upgrade to Premium for unlimited blurs.'
+      );
+      return;
+    }
+
+    // Increment blur count for free tier
+    if (userTier === 'free') {
+      incrementBlurCount();
+      const remaining = getRemainingBlurs(userTier);
+      if (remaining <= 2 && remaining > 0) {
+        toast.info(
+          `${remaining} blur${remaining === 1 ? '' : 's'} remaining today`
+        );
+      }
+    }
+
     if (fileType === 'pdf') {
       const currentRegions = getCurrentBlurRegions();
       const newRegions = [...currentRegions, region];
@@ -172,7 +208,7 @@ export default function EditorPage() {
     if (fileType === 'pdf' && pdfPages.length > 0) {
       try {
         toast.info('Exporting PDF...');
-        await exportPDFWithBlur(pdfPages, canvasScale);
+        await exportPDFWithBlur(pdfPages, canvasScale, userTier);
         toast.success('PDF exported successfully!');
       } catch (error) {
         console.error('Error exporting PDF:', error);
@@ -309,6 +345,11 @@ export default function EditorPage() {
 
         ctx.restore();
       });
+
+      // Add watermark for free tier users
+      if (shouldAddWatermark(userTier)) {
+        addWatermark(canvas);
+      }
 
       // Download the image
       canvas.toBlob((blob) => {
@@ -499,6 +540,9 @@ export default function EditorPage() {
           </div>
         )}
       </main>
+
+      {/* Paywall Modal */}
+      <PaywallModal open={showPaywall} onClose={() => setShowPaywall(false)} />
     </div>
   );
 }
