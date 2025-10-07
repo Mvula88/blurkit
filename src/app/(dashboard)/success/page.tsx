@@ -1,13 +1,11 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
 import { Navbar } from '@/components/layout/Navbar';
 import { useAuth } from '@/hooks/useAuth';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { CheckCircle2, Loader2, Sparkles } from 'lucide-react';
-import confetti from 'canvas-confetti';
 
 export default function SuccessPage() {
   const { user } = useAuth();
@@ -18,38 +16,53 @@ export default function SuccessPage() {
     const duration = 3 * 1000;
     const animationEnd = Date.now() + duration;
 
-    const interval = setInterval(() => {
-      const timeLeft = animationEnd - Date.now();
+    const triggerConfetti = async () => {
+      const confetti = (await import('canvas-confetti')).default;
 
-      if (timeLeft <= 0) {
-        clearInterval(interval);
-        setLoading(false);
-        return;
-      }
+      const interval = setInterval(() => {
+        const timeLeft = animationEnd - Date.now();
 
-      confetti({
-        particleCount: 2,
-        angle: 60,
-        spread: 55,
-        origin: { x: 0 },
-        colors: ['#3B82F6', '#6366F1', '#8B5CF6'],
-      });
+        if (timeLeft <= 0) {
+          clearInterval(interval);
+          setLoading(false);
+          return;
+        }
 
-      confetti({
-        particleCount: 2,
-        angle: 120,
-        spread: 55,
-        origin: { x: 1 },
-        colors: ['#3B82F6', '#6366F1', '#8B5CF6'],
-      });
-    }, 100);
+        confetti({
+          particleCount: 2,
+          angle: 60,
+          spread: 55,
+          origin: { x: 0 },
+          colors: ['#3B82F6', '#6366F1', '#8B5CF6'],
+        });
+
+        confetti({
+          particleCount: 2,
+          angle: 120,
+          spread: 55,
+          origin: { x: 1 },
+          colors: ['#3B82F6', '#6366F1', '#8B5CF6'],
+        });
+      }, 100);
+
+      return interval;
+    };
+
+    let intervalId: NodeJS.Timeout;
+
+    triggerConfetti().then((interval) => {
+      intervalId = interval;
+    });
 
     // Simulate API call delay
-    setTimeout(() => {
+    const timeout = setTimeout(() => {
       setLoading(false);
     }, 2000);
 
-    return () => clearInterval(interval);
+    return () => {
+      if (intervalId) clearInterval(intervalId);
+      clearTimeout(timeout);
+    };
   }, []);
 
   return (
