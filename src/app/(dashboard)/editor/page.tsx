@@ -62,7 +62,9 @@ export default function EditorPage() {
       toast.success(`PDF loaded with ${pages.length} pages`);
     } catch (error) {
       console.error('Error loading PDF:', error);
-      toast.error('Failed to load PDF');
+      const errorMessage =
+        error instanceof Error ? error.message : 'Unknown error';
+      toast.error(`Failed to load PDF: ${errorMessage}`);
     }
   };
 
