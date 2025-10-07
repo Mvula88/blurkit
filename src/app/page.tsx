@@ -9,53 +9,57 @@ import {
   ArrowRight,
   Shield,
   Layers,
+  Upload,
 } from 'lucide-react';
 
 export default function Home() {
   return (
     <div className="min-h-screen">
-      {/* Hero Section with Gradient */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800">
-        {/* Background Pattern */}
-        <div className="absolute inset-0 bg-grid-white/[0.05] bg-[size:32px_32px]" />
-
-        <div className="relative container mx-auto px-4 py-20 sm:py-32">
-          <div className="flex flex-col items-center text-center space-y-8">
-            <div className="inline-flex items-center rounded-full border border-white/20 bg-white/10 backdrop-blur-sm px-4 py-1.5 text-sm text-white">
-              <Sparkles className="mr-2 h-4 w-4" />
-              Privacy-First Image Protection
-            </div>
-
-            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight max-w-5xl text-white">
-              Your Image Privacy Infrastructure{' '}
-              <span className="text-yellow-400">Made Smarter</span>
+      {/* Hero Section - Clean Upload Design */}
+      <section className="relative bg-gradient-to-b from-blue-50 via-white to-gray-50 pt-20 pb-32">
+        <div className="container mx-auto px-4">
+          <div className="max-w-5xl mx-auto text-center space-y-6">
+            {/* Heading */}
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-gray-900">
+              Online image blur & privacy editor
             </h1>
 
-            <p className="text-lg sm:text-xl text-blue-100 max-w-3xl leading-relaxed">
-              Transform sensitive data into secure, shareable images. Get
-              real-time blur editing for protection of personal information,
-              plus a suite of tools for optimizing privacy. All without changing
-              your existing workflow.
+            {/* Subheading */}
+            <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto">
+              Multiple blur types supported. 100% browser-based processing.
+              Upload an image to get started!
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 mt-8">
+            {/* Upload Area */}
+            <div className="mt-12 relative">
               <Link href="/editor">
-                <Button
-                  size="lg"
-                  className="group bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-semibold px-8"
-                >
-                  Get Started
-                  <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
-                </Button>
-              </Link>
-              <Link href="/login">
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="border-white/30 text-white hover:bg-white/10 hover:text-white"
-                >
-                  Sign In
-                </Button>
+                <div className="border-4 border-dashed border-gray-300 rounded-3xl bg-white hover:border-blue-400 hover:bg-blue-50/30 transition-all duration-300 cursor-pointer p-16 sm:p-24">
+                  <div className="flex flex-col items-center justify-center space-y-6">
+                    {/* Upload Icon */}
+                    <div className="relative">
+                      <div className="absolute inset-0 bg-gradient-to-br from-blue-400 to-indigo-500 rounded-2xl blur-xl opacity-30" />
+                      <div className="relative bg-white rounded-2xl p-6 shadow-lg">
+                        <Upload className="h-16 w-16 text-blue-600" />
+                      </div>
+                    </div>
+
+                    {/* CTA Button */}
+                    <Button
+                      size="lg"
+                      className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold px-12 py-6 text-lg shadow-lg hover:shadow-xl transition-all"
+                    >
+                      UPLOAD YOUR IMAGE
+                    </Button>
+
+                    {/* Drop Text */}
+                    <p className="text-gray-500 text-sm">
+                      or drop your image here
+                    </p>
+
+                    {/* File Size */}
+                    <p className="text-gray-400 text-xs">Size up to 100 MB</p>
+                  </div>
+                </div>
               </Link>
             </div>
           </div>
