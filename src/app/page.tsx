@@ -65,23 +65,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Product Preview Section */}
-      <section className="relative -mt-20 container mx-auto px-4 pb-20">
-        <div className="relative rounded-2xl border-4 border-white shadow-2xl bg-white overflow-hidden">
-          <div className="aspect-video bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center">
-            <div className="text-center p-8">
-              <ImageIcon className="h-24 w-24 text-blue-600 mx-auto mb-4" />
-              <p className="text-gray-600 font-medium text-lg">
-                Editor Preview Coming Soon
-              </p>
-              <p className="text-gray-500 text-sm mt-2">
-                Professional blur editing interface with precision controls
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Features Section */}
       <section className="container mx-auto px-4 py-20">
         <div className="text-center mb-16">
