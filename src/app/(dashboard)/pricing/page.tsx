@@ -1,13 +1,49 @@
 'use client';
 
+import { useState } from 'react';
 import { Navbar } from '@/components/layout/Navbar';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Check, Zap, Crown, Infinity } from 'lucide-react';
+import { Check, Zap, Crown, Infinity, Loader2 } from 'lucide-react';
+import { toast } from 'sonner';
 
 export default function PricingPage() {
   const { user } = useAuth();
+  const [loading, setLoading] = useState<string | null>(null);
+
+  const handleCheckout = async (plan: string) => {
+    if (!user) {
+      toast.error('Please sign in to upgrade');
+      window.location.href = '/login';
+      return;
+    }
+
+    setLoading(plan);
+
+    try {
+      const response = await fetch('/api/stripe/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ plan }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to create checkout session');
+      }
+
+      // Redirect to Stripe Checkout
+      if (data.url) {
+        window.location.href = data.url;
+      }
+    } catch (error) {
+      console.error('Checkout error:', error);
+      toast.error('Failed to start checkout. Please try again.');
+      setLoading(null);
+    }
+  };
 
   const features = {
     free: [
@@ -129,13 +165,20 @@ export default function PricingPage() {
 
               <Button
                 className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white"
-                onClick={() => {
-                  // TODO: Implement Stripe checkout
-                  alert('Stripe integration coming soon!');
-                }}
+                onClick={() => handleCheckout('premium_monthly')}
+                disabled={loading !== null}
               >
-                <Zap className="mr-2 h-4 w-4" />
-                Start Premium
+                {loading === 'premium_monthly' ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Processing...
+                  </>
+                ) : (
+                  <>
+                    <Zap className="mr-2 h-4 w-4" />
+                    Start Premium
+                  </>
+                )}
               </Button>
             </CardContent>
           </Card>
@@ -169,13 +212,20 @@ export default function PricingPage() {
               <Button
                 variant="outline"
                 className="w-full border-amber-600 text-amber-600 hover:bg-amber-50"
-                onClick={() => {
-                  // TODO: Implement Stripe checkout
-                  alert('Stripe integration coming soon!');
-                }}
+                onClick={() => handleCheckout('lifetime')}
+                disabled={loading !== null}
               >
-                <Infinity className="mr-2 h-4 w-4" />
-                Get Lifetime Access
+                {loading === 'lifetime' ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Processing...
+                  </>
+                ) : (
+                  <>
+                    <Infinity className="mr-2 h-4 w-4" />
+                    Get Lifetime Access
+                  </>
+                )}
               </Button>
             </CardContent>
           </Card>
