@@ -29,8 +29,8 @@ export function PaywallModal({ open, onClose }: PaywallModalProps) {
             Unlock Unlimited Blurs
           </DialogTitle>
           <DialogDescription className="text-center text-base pt-2">
-            You've reached your daily limit of 5 free blurs. Upgrade to Premium
-            for unlimited access!
+            You&apos;ve reached your daily limit of 5 free blurs. Upgrade to
+            Premium for unlimited access!
           </DialogDescription>
         </DialogHeader>
 

@@ -84,8 +84,8 @@ export default function PricingPage() {
             Simple, Transparent Pricing
           </h1>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Choose the plan that's right for you. Upgrade, downgrade, or cancel
-            anytime.
+            Choose the plan that&apos;s right for you. Upgrade, downgrade, or
+            cancel anytime.
           </p>
         </div>
 

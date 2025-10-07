@@ -11,17 +11,12 @@ import confetti from 'canvas-confetti';
 
 export default function SuccessPage() {
   const { user } = useAuth();
-  const searchParams = useSearchParams();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     // Trigger confetti animation
     const duration = 3 * 1000;
     const animationEnd = Date.now() + duration;
-
-    const randomInRange = (min: number, max: number) => {
-      return Math.random() * (max - min) + min;
-    };
 
     const interval = setInterval(() => {
       const timeLeft = animationEnd - Date.now();

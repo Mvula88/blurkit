@@ -34,7 +34,7 @@ export const dynamic = 'force-dynamic';
 
 export default function EditorPage() {
   const { user } = useAuth();
-  const [userTier, setUserTier] = useState<UserTier>('free');
+  const [userTier] = useState<UserTier>('free'); // TODO: Fetch from Supabase
   const [showPaywall, setShowPaywall] = useState(false);
   const [image, setImage] = useState<string | null>(null);
   const [fileType, setFileType] = useState<FileType>('image');
