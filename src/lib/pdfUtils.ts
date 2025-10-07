@@ -28,6 +28,7 @@ export async function loadPDFPages(file: File): Promise<PDFPage[]> {
     await page.render({
       canvasContext: context,
       viewport: viewport,
+      canvas: canvas,
     }).promise;
 
     pages.push({
