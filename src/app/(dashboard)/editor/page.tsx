@@ -15,6 +15,9 @@ import { loadPDFPages } from '@/lib/pdfUtils';
 import { exportPDFWithBlur } from '@/lib/pdfExport';
 import type { Tool, BlurRegion, BlurType, PDFPage, FileType } from '@/types';
 
+// Force dynamic rendering to avoid SSR issues with PDF.js
+export const dynamic = 'force-dynamic';
+
 export default function EditorPage() {
   const { user } = useAuth();
   const [image, setImage] = useState<string | null>(null);
