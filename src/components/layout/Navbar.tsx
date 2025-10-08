@@ -50,6 +50,14 @@ export function Navbar({ user }: NavbarProps) {
           </Link>
 
           <div className="flex items-center gap-2">
+            <Link href="/blog">
+              <Button
+                variant="ghost"
+                className="hover:bg-blue-50 hover:text-blue-700"
+              >
+                Blog
+              </Button>
+            </Link>
             <Link href="/pricing">
               <Button
                 variant="ghost"
