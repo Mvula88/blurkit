@@ -9,6 +9,10 @@ import {
   Shield,
   Layers,
   Upload,
+  FileText,
+  Palette,
+  Clipboard,
+  History,
 } from 'lucide-react';
 
 export default function Home() {
@@ -69,10 +73,11 @@ export default function Home() {
       <section className="container mx-auto px-4 py-20">
         <div className="text-center mb-16">
           <h2 className="text-3xl sm:text-5xl font-bold mb-4 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-            Powerful Features for Image Privacy
+            Powerful Privacy Protection Tools
           </h2>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Everything you need to protect sensitive information in your images
+            Everything you need to protect sensitive information in images, PDFs,
+            and screenshots
           </p>
         </div>
 
@@ -80,24 +85,24 @@ export default function Home() {
           {/* Feature 1 */}
           <div className="group relative flex flex-col p-8 rounded-2xl border bg-card hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
             <div className="h-14 w-14 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-              <ImageIcon className="h-7 w-7 text-white" />
+              <Palette className="h-7 w-7 text-white" />
             </div>
-            <h3 className="text-xl font-bold mb-3">Custom Blur Regions</h3>
+            <h3 className="text-xl font-bold mb-3">Multiple Blur Types</h3>
             <p className="text-muted-foreground leading-relaxed">
-              Draw precise rectangular or circular blur areas with pixel-perfect
-              accuracy. Multiple shapes supported.
+              Choose from Gaussian blur (smooth), Pixelate (mosaic), or Solid
+              Color blocks. Adjustable intensity for maximum security.
             </p>
           </div>
 
           {/* Feature 2 */}
           <div className="group relative flex flex-col p-8 rounded-2xl border bg-card hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
             <div className="h-14 w-14 rounded-xl bg-gradient-to-br from-indigo-500 to-indigo-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-              <Zap className="h-7 w-7 text-white" />
+              <FileText className="h-7 w-7 text-white" />
             </div>
-            <h3 className="text-xl font-bold mb-3">Real-Time Preview</h3>
+            <h3 className="text-xl font-bold mb-3">PDF & Image Support</h3>
             <p className="text-muted-foreground leading-relaxed">
-              See changes instantly as you adjust blur intensity. Lightning-fast
-              processing even on large images.
+              Edit multi-page PDFs and images (PNG, JPG, WEBP). Navigate between
+              pages and apply blur regions individually.
             </p>
           </div>
 
@@ -108,44 +113,44 @@ export default function Home() {
             </div>
             <h3 className="text-xl font-bold mb-3">100% Private</h3>
             <p className="text-muted-foreground leading-relaxed">
-              All processing happens in your browser. Your images never leave
-              your device. Zero server uploads.
+              All processing happens in your browser. Your files never leave your
+              device. Zero server uploads, maximum privacy.
             </p>
           </div>
 
           {/* Feature 4 */}
           <div className="group relative flex flex-col p-8 rounded-2xl border bg-card hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
             <div className="h-14 w-14 rounded-xl bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-              <Shield className="h-7 w-7 text-white" />
+              <Clipboard className="h-7 w-7 text-white" />
             </div>
-            <h3 className="text-xl font-bold mb-3">Drag & Resize</h3>
+            <h3 className="text-xl font-bold mb-3">Screenshot Paste</h3>
             <p className="text-muted-foreground leading-relaxed">
-              Easily move and resize blur regions with intuitive handles. Undo
-              and redo support included.
+              Paste screenshots directly from clipboard (Ctrl+V). Instantly blur
+              sensitive areas before sharing online.
             </p>
           </div>
 
           {/* Feature 5 */}
           <div className="group relative flex flex-col p-8 rounded-2xl border bg-card hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
             <div className="h-14 w-14 rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-              <Download className="h-7 w-7 text-white" />
+              <History className="h-7 w-7 text-white" />
             </div>
-            <h3 className="text-xl font-bold mb-3">Export High Quality</h3>
+            <h3 className="text-xl font-bold mb-3">Undo/Redo History</h3>
             <p className="text-muted-foreground leading-relaxed">
-              Download your protected images in original quality. Maintains full
-              resolution and metadata.
+              Full undo and redo support for all edits. Experiment freely with
+              blur regions and revert any changes instantly.
             </p>
           </div>
 
           {/* Feature 6 */}
           <div className="group relative flex flex-col p-8 rounded-2xl border bg-card hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
             <div className="h-14 w-14 rounded-xl bg-gradient-to-br from-pink-500 to-pink-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-              <Layers className="h-7 w-7 text-white" />
+              <Download className="h-7 w-7 text-white" />
             </div>
-            <h3 className="text-xl font-bold mb-3">Save Projects</h3>
+            <h3 className="text-xl font-bold mb-3">High Quality Export</h3>
             <p className="text-muted-foreground leading-relaxed">
-              Create an account to save your blur configurations and access them
-              from anywhere.
+              Export images and PDFs in original quality. Premium users get no
+              watermarks. 15 free exports daily.
             </p>
           </div>
         </div>
@@ -159,11 +164,12 @@ export default function Home() {
         <div className="relative container mx-auto px-4 py-24">
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-3xl sm:text-5xl font-bold mb-6 text-white">
-              Ready to Protect Your Images?
+              Ready to Protect Your Documents?
             </h2>
             <p className="text-blue-100 text-lg sm:text-xl mb-10 max-w-2xl mx-auto leading-relaxed">
-              Join thousands of users securing their sensitive information with
-              BlurKit. Start blurring in seconds with our powerful editor.
+              Join thousands of users securing their sensitive information in
+              images, PDFs, and screenshots. Start blurring in seconds with our
+              powerful editor.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/editor">
