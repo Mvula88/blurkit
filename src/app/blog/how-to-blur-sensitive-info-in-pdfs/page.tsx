@@ -59,10 +59,10 @@ export default function BlogPost() {
           </h1>
 
           <p className="text-xl text-gray-600 leading-relaxed">
-            Learn professional techniques for permanently blurring sensitive data
-            in PDF documents while maintaining GDPR and HIPAA compliance. This
-            comprehensive guide covers free tools, best practices, and common
-            mistakes to avoid.
+            Learn professional techniques for permanently blurring sensitive
+            data in PDF documents while maintaining GDPR and HIPAA compliance.
+            This comprehensive guide covers free tools, best practices, and
+            common mistakes to avoid.
           </p>
         </header>
 
@@ -74,7 +74,10 @@ export default function BlogPost() {
           </h2>
           <ul className="space-y-2 text-sm">
             <li>
-              <a href="#why-blur-pdfs" className="text-blue-600 hover:underline">
+              <a
+                href="#why-blur-pdfs"
+                className="text-blue-600 hover:underline"
+              >
                 1. Why Blur Sensitive Information in PDFs?
               </a>
             </li>
@@ -87,10 +90,7 @@ export default function BlogPost() {
               </a>
             </li>
             <li>
-              <a
-                href="#step-by-step"
-                className="text-blue-600 hover:underline"
-              >
+              <a href="#step-by-step" className="text-blue-600 hover:underline">
                 3. Step-by-Step: How to Blur PDFs
               </a>
             </li>
@@ -132,10 +132,10 @@ export default function BlogPost() {
 
             <p className="text-gray-700 leading-relaxed mb-4">
               In 2025, data privacy regulations like{' '}
-              <strong>GDPR in Europe</strong> and <strong>HIPAA in the US</strong>{' '}
-              require organizations to protect personally identifiable information
-              (PII) before sharing documents. Blurring sensitive data in PDFs is
-              essential when:
+              <strong>GDPR in Europe</strong> and{' '}
+              <strong>HIPAA in the US</strong> require organizations to protect
+              personally identifiable information (PII) before sharing
+              documents. Blurring sensitive data in PDFs is essential when:
             </p>
 
             <ul className="space-y-3 mb-6">
@@ -163,8 +163,8 @@ export default function BlogPost() {
               <li className="flex items-start gap-3">
                 <CheckCircle2 className="h-5 w-5 text-green-600 flex-shrink-0 mt-1" />
                 <span>
-                  <strong>Sending contracts or invoices</strong> that need partial
-                  redaction
+                  <strong>Sending contracts or invoices</strong> that need
+                  partial redaction
                 </span>
               </li>
             </ul>
@@ -194,8 +194,8 @@ export default function BlogPost() {
 
             <p className="text-gray-700 leading-relaxed mb-6">
               Understanding the distinction between{' '}
-              <strong>blurring and redaction</strong> is crucial for choosing the
-              right method:
+              <strong>blurring and redaction</strong> is crucial for choosing
+              the right method:
             </p>
 
             <div className="grid md:grid-cols-2 gap-6 mb-6">
@@ -228,8 +228,9 @@ export default function BlogPost() {
 
             <p className="text-gray-700 leading-relaxed">
               <strong>Pro Tip:</strong> For maximum security, use{' '}
-              <strong>flatten the PDF</strong> after blurring to convert all pages
-              to images, making the original text completely unrecoverable.
+              <strong>flatten the PDF</strong> after blurring to convert all
+              pages to images, making the original text completely
+              unrecoverable.
             </p>
           </section>
 
@@ -246,26 +247,30 @@ export default function BlogPost() {
                 <ol className="space-y-4 text-gray-700">
                   <li>
                     <strong>1. Upload your PDF</strong> - Visit{' '}
-                    <Link href="/editor" className="text-blue-600 hover:underline">
+                    <Link
+                      href="/editor"
+                      className="text-blue-600 hover:underline"
+                    >
                       BlurKit&apos;s editor
                     </Link>{' '}
                     and drag & drop your PDF file (up to 100MB)
                   </li>
                   <li>
-                    <strong>2. Navigate pages</strong> - Use the page selector to
-                    view each page that needs editing
+                    <strong>2. Navigate pages</strong> - Use the page selector
+                    to view each page that needs editing
                   </li>
                   <li>
                     <strong>3. Draw blur regions</strong> - Click and drag
                     rectangular or circular areas over sensitive information
                   </li>
                   <li>
-                    <strong>4. Adjust blur intensity</strong> - Use the slider to
-                    control how much blur is applied (higher = more secure)
+                    <strong>4. Adjust blur intensity</strong> - Use the slider
+                    to control how much blur is applied (higher = more secure)
                   </li>
                   <li>
                     <strong>5. Choose blur type</strong> - Select Gaussian blur
-                    (smooth), Pixelate (mosaic), or Solid Color (complete coverage)
+                    (smooth), Pixelate (mosaic), or Solid Color (complete
+                    coverage)
                   </li>
                   <li>
                     <strong>6. Export securely</strong> - Click &quot;Export
@@ -315,8 +320,8 @@ export default function BlogPost() {
                   <li>3. Combine edited images back into a PDF</li>
                 </ol>
                 <p className="text-sm text-gray-600 mt-3">
-                  ⚠️ <strong>Drawback:</strong> Time-consuming; requires multiple
-                  tools; may reduce image quality
+                  ⚠️ <strong>Drawback:</strong> Time-consuming; requires
+                  multiple tools; may reduce image quality
                 </p>
               </div>
             </div>
@@ -336,8 +341,8 @@ export default function BlogPost() {
                   </h3>
                   <p className="text-gray-700">
                     Open the blurred PDF in a different viewer and zoom in to
-                    ensure sensitive data is completely obscured. Test copying text
-                    from blurred areas.
+                    ensure sensitive data is completely obscured. Test copying
+                    text from blurred areas.
                   </p>
                 </div>
               </div>
@@ -350,8 +355,8 @@ export default function BlogPost() {
                   </h3>
                   <p className="text-gray-700">
                     Don&apos;t use minimal blur that can be reversed with image
-                    enhancement tools. Apply strong blur (radius 50+) or use solid
-                    color blocks.
+                    enhancement tools. Apply strong blur (radius 50+) or use
+                    solid color blocks.
                   </p>
                 </div>
               </div>
@@ -377,9 +382,9 @@ export default function BlogPost() {
                     4. Flatten PDFs After Editing
                   </h3>
                   <p className="text-gray-700">
-                    Converting each page to an image prevents recovery of original
-                    text. Most professional tools offer a &quot;flatten&quot;
-                    option.
+                    Converting each page to an image prevents recovery of
+                    original text. Most professional tools offer a
+                    &quot;flatten&quot; option.
                   </p>
                 </div>
               </div>
@@ -391,8 +396,8 @@ export default function BlogPost() {
                     5. Maintain Original Files Securely
                   </h3>
                   <p className="text-gray-700">
-                    Keep unredacted originals in encrypted storage. Never overwrite
-                    the original file with the redacted version.
+                    Keep unredacted originals in encrypted storage. Never
+                    overwrite the original file with the redacted version.
                   </p>
                 </div>
               </div>
@@ -407,12 +412,13 @@ export default function BlogPost() {
             <div className="space-y-6">
               <div className="bg-red-50 border-l-4 border-red-500 p-6">
                 <h3 className="font-bold text-red-900 mb-2">
-                  ❌ Mistake #1: Using Screenshot Tools Instead of Proper Blurring
+                  ❌ Mistake #1: Using Screenshot Tools Instead of Proper
+                  Blurring
                 </h3>
                 <p className="text-red-800 text-sm">
-                  Taking a screenshot and adding blur in Paint or Photos leaves the
-                  original PDF intact. Anyone with access to the source file can
-                  see unredacted data.
+                  Taking a screenshot and adding blur in Paint or Photos leaves
+                  the original PDF intact. Anyone with access to the source file
+                  can see unredacted data.
                 </p>
               </div>
 
@@ -421,8 +427,8 @@ export default function BlogPost() {
                   ❌ Mistake #2: Relying on PDF Highlight Tools
                 </h3>
                 <p className="text-red-800 text-sm">
-                  Black highlight markers in PDF readers are visual overlays only.
-                  The text underneath is still selectable and searchable.
+                  Black highlight markers in PDF readers are visual overlays
+                  only. The text underneath is still selectable and searchable.
                 </p>
               </div>
 
@@ -441,8 +447,8 @@ export default function BlogPost() {
                   ❌ Mistake #4: Forgetting Headers and Footers
                 </h3>
                 <p className="text-red-800 text-sm">
-                  Sensitive information often appears in page headers, footers, or
-                  margins. Check every page edge carefully.
+                  Sensitive information often appears in page headers, footers,
+                  or margins. Check every page edge carefully.
                 </p>
               </div>
 
@@ -497,8 +503,8 @@ export default function BlogPost() {
                   </span>
                 </div>
                 <p className="text-gray-600 text-sm">
-                  Professional PDF editing suite with permanent redaction. Best for
-                  organizations with legal compliance requirements.
+                  Professional PDF editing suite with permanent redaction. Best
+                  for organizations with legal compliance requirements.
                 </p>
               </div>
 
@@ -529,8 +535,8 @@ export default function BlogPost() {
                 </h3>
                 <p className="text-gray-700">
                   A: Blurring can be GDPR-compliant if the blur is strong enough
-                  that the original data cannot be recovered. For legal documents,
-                  permanent redaction is recommended over blurring.
+                  that the original data cannot be recovered. For legal
+                  documents, permanent redaction is recommended over blurring.
                 </p>
               </div>
 
@@ -550,9 +556,9 @@ export default function BlogPost() {
                   Q: What&apos;s the difference between blurring and pixelating?
                 </h3>
                 <p className="text-gray-700">
-                  A: Pixelation creates a mosaic effect (like Japanese TV censors),
-                  while Gaussian blur smoothly obscures the image. Both are
-                  effective; pixelation is often preferred for faces.
+                  A: Pixelation creates a mosaic effect (like Japanese TV
+                  censors), while Gaussian blur smoothly obscures the image.
+                  Both are effective; pixelation is often preferred for faces.
                 </p>
               </div>
 
@@ -561,9 +567,9 @@ export default function BlogPost() {
                   Q: How do I blur an entire page in a PDF?
                 </h3>
                 <p className="text-gray-700">
-                  A: In BlurKit, draw a blur region covering the entire page. For
-                  multiple pages, apply blur regions individually to each page that
-                  needs protection.
+                  A: In BlurKit, draw a blur region covering the entire page.
+                  For multiple pages, apply blur regions individually to each
+                  page that needs protection.
                 </p>
               </div>
 
@@ -582,13 +588,15 @@ export default function BlogPost() {
 
           {/* Conclusion */}
           <section className="mb-12">
-            <h2 className="text-3xl font-bold mb-6 text-gray-900">Conclusion</h2>
+            <h2 className="text-3xl font-bold mb-6 text-gray-900">
+              Conclusion
+            </h2>
             <p className="text-gray-700 leading-relaxed mb-4">
               Properly blurring sensitive information in PDFs is essential for
               protecting privacy and maintaining compliance with data protection
-              regulations. By following the methods and best practices outlined in
-              this guide, you can securely share PDF documents without risking data
-              exposure.
+              regulations. By following the methods and best practices outlined
+              in this guide, you can securely share PDF documents without
+              risking data exposure.
             </p>
             <p className="text-gray-700 leading-relaxed mb-6">
               For the fastest and most secure PDF blurring experience, try{' '}
@@ -601,8 +609,8 @@ export default function BlogPost() {
                 Ready to Secure Your PDFs?
               </h3>
               <p className="mb-6 text-blue-100">
-                Start blurring sensitive information in seconds with BlurKit&apos;s
-                powerful editor. No installation required.
+                Start blurring sensitive information in seconds with
+                BlurKit&apos;s powerful editor. No installation required.
               </p>
               <Link href="/editor">
                 <Button

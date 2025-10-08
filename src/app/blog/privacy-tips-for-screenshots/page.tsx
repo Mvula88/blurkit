@@ -52,8 +52,8 @@ export default function BlogPost() {
             15 Essential Privacy Tips for Screenshots (Avoid Data Leaks)
           </h1>
           <p className="text-xl text-gray-600">
-            Protect yourself from accidental data exposure with these expert tips
-            for secure screenshot sharing.
+            Protect yourself from accidental data exposure with these expert
+            tips for secure screenshot sharing.
           </p>
         </header>
 
@@ -64,7 +64,9 @@ export default function BlogPost() {
               <div key={idx} className="mb-8 flex items-start gap-4">
                 <Icon className="h-6 w-6 text-blue-600 flex-shrink-0 mt-1" />
                 <div>
-                  <h2 className="text-2xl font-bold mb-3">{idx + 1}. {tip.title}</h2>
+                  <h2 className="text-2xl font-bold mb-3">
+                    {idx + 1}. {tip.title}
+                  </h2>
                   <p className="text-gray-700">{tip.description}</p>
                 </div>
               </div>
@@ -76,7 +78,10 @@ export default function BlogPost() {
               Protect Your Screenshots with BlurKit
             </h3>
             <Link href="/editor">
-              <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100">
+              <Button
+                size="lg"
+                className="bg-white text-blue-600 hover:bg-gray-100"
+              >
                 Try Free Now
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>

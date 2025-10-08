@@ -5,8 +5,7 @@ import { Button } from '@/components/ui/button';
 import { ArrowRight, CheckCircle2 } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title:
-    'PDF Redaction vs Blurring: Which Method is More Secure? | BlurKit',
+  title: 'PDF Redaction vs Blurring: Which Method is More Secure? | BlurKit',
   description:
     'In-depth technical comparison between PDF redaction and blurring methods. Learn which offers better security for different use cases and compliance requirements.',
   keywords:
@@ -31,8 +30,8 @@ export default function BlogPost() {
             PDF Redaction vs Blurring: Which Method is More Secure?
           </h1>
           <p className="text-xl text-gray-600">
-            Comprehensive technical comparison to help you choose the right method
-            for protecting sensitive PDF data.
+            Comprehensive technical comparison to help you choose the right
+            method for protecting sensitive PDF data.
           </p>
         </header>
 
@@ -40,8 +39,8 @@ export default function BlogPost() {
           <section className="mb-12">
             <h2 className="text-3xl font-bold mb-6">What is PDF Redaction?</h2>
             <p className="text-gray-700 mb-4">
-              PDF redaction <strong>permanently removes</strong> text, images, and
-              metadata from the document. The original data is completely
+              PDF redaction <strong>permanently removes</strong> text, images,
+              and metadata from the document. The original data is completely
               eliminated and cannot be recovered.
             </p>
             <div className="bg-blue-50 border-l-4 border-blue-600 p-6">
@@ -67,8 +66,8 @@ export default function BlogPost() {
             <h2 className="text-3xl font-bold mb-6">What is PDF Blurring?</h2>
             <p className="text-gray-700 mb-4">
               PDF blurring <strong>obscures</strong> sensitive information
-              visually while preserving the document&apos;s layout. It&apos;s faster and
-              easier than redaction.
+              visually while preserving the document&apos;s layout. It&apos;s
+              faster and easier than redaction.
             </p>
             <div className="bg-indigo-50 border-l-4 border-indigo-600 p-6">
               <h3 className="font-bold mb-3">When to Use Blurring:</h3>
@@ -133,9 +132,10 @@ export default function BlogPost() {
               documents and compliance requirements.
             </p>
             <p className="text-gray-700 mb-6">
-              <strong>For everyday privacy:</strong> Blurring with BlurKit provides
-              excellent protection for screenshots, presentations, and general
-              document sharing - especially when combined with PDF flattening.
+              <strong>For everyday privacy:</strong> Blurring with BlurKit
+              provides excellent protection for screenshots, presentations, and
+              general document sharing - especially when combined with PDF
+              flattening.
             </p>
 
             <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg p-8 text-center">
@@ -143,11 +143,14 @@ export default function BlogPost() {
                 Try BlurKit&apos;s PDF Blurring
               </h3>
               <p className="mb-6 text-blue-100">
-                Fast, secure, and browser-based. Perfect for protecting sensitive
-                PDF information.
+                Fast, secure, and browser-based. Perfect for protecting
+                sensitive PDF information.
               </p>
               <Link href="/editor">
-                <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100">
+                <Button
+                  size="lg"
+                  className="bg-white text-blue-600 hover:bg-gray-100"
+                >
                   Start Blurring Free
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>

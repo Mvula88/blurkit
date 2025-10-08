@@ -2,17 +2,10 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Navbar } from '@/components/layout/Navbar';
 import { Button } from '@/components/ui/button';
-import {
-  ArrowRight,
-  Star,
-  CheckCircle2,
-  XCircle,
-  Trophy,
-} from 'lucide-react';
+import { ArrowRight, Star, CheckCircle2, XCircle, Trophy } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title:
-    'Best Free Image Redaction Tools in 2025 (Tested & Ranked) | BlurKit',
+  title: 'Best Free Image Redaction Tools in 2025 (Tested & Ranked) | BlurKit',
   description:
     'Comprehensive comparison of the top 10 free image redaction and blur tools in 2025. Independent testing, rankings, and recommendations for secure image privacy protection.',
   keywords:
@@ -230,7 +223,9 @@ export default function BlogPost() {
               {/* Tool 3 */}
               <div className="border-2 rounded-lg p-6">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-2xl font-bold">3. GIMP (Free & Open Source)</h3>
+                  <h3 className="text-2xl font-bold">
+                    3. GIMP (Free & Open Source)
+                  </h3>
                   <div className="flex items-center gap-1">
                     {[1, 2, 3, 4].map((i) => (
                       <Star
@@ -245,7 +240,8 @@ export default function BlogPost() {
 
                 <p className="text-gray-700 mb-4">
                   Powerful open-source image editor with advanced blur and
-                  pixelation filters. Professional-grade but steep learning curve.
+                  pixelation filters. Professional-grade but steep learning
+                  curve.
                 </p>
 
                 <div className="grid md:grid-cols-2 gap-4 text-sm">
@@ -277,7 +273,9 @@ export default function BlogPost() {
               {/* Tool 4 */}
               <div className="border-2 rounded-lg p-6">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-2xl font-bold">4. Windows Snipping Tool</h3>
+                  <h3 className="text-2xl font-bold">
+                    4. Windows Snipping Tool
+                  </h3>
                   <div className="flex items-center gap-1">
                     {[1, 2, 3].map((i) => (
                       <Star
@@ -292,8 +290,8 @@ export default function BlogPost() {
                 </div>
 
                 <p className="text-gray-700 mb-4">
-                  Built-in Windows screenshot tool with basic annotation features.
-                  Convenient but lacks security features.
+                  Built-in Windows screenshot tool with basic annotation
+                  features. Convenient but lacks security features.
                 </p>
 
                 <div className="grid md:grid-cols-2 gap-4 text-sm">
@@ -317,7 +315,8 @@ export default function BlogPost() {
                 </div>
 
                 <p className="text-xs text-gray-600 mt-4">
-                  <strong>Best for:</strong> Windows users needing quick annotations
+                  <strong>Best for:</strong> Windows users needing quick
+                  annotations
                 </p>
               </div>
 
@@ -464,7 +463,9 @@ export default function BlogPost() {
               </div>
 
               <div className="border-l-4 border-gray-400 pl-6">
-                <h3 className="text-xl font-bold mb-2">Choose GIMP if you need:</h3>
+                <h3 className="text-xl font-bold mb-2">
+                  Choose GIMP if you need:
+                </h3>
                 <ul className="space-y-2 text-gray-700">
                   <li>✓ Advanced image editing capabilities</li>
                   <li>✓ Batch processing automation</li>
@@ -486,21 +487,22 @@ export default function BlogPost() {
                   Q: Is it safe to use free online redaction tools?
                 </h3>
                 <p className="text-gray-700">
-                  A: Use tools that process files in your browser (like BlurKit or
-                  Redact.photo) rather than uploading to servers. Always check the
-                  privacy policy before uploading sensitive documents.
+                  A: Use tools that process files in your browser (like BlurKit
+                  or Redact.photo) rather than uploading to servers. Always
+                  check the privacy policy before uploading sensitive documents.
                 </p>
               </div>
 
               <div>
                 <h3 className="text-lg font-bold mb-2">
-                  Q: What&apos;s the difference between free and paid redaction tools?
+                  Q: What&apos;s the difference between free and paid redaction
+                  tools?
                 </h3>
                 <p className="text-gray-700">
                   A: Paid tools like Adobe Acrobat Pro offer permanent redaction
-                  (complete data removal), batch processing, and legal compliance
-                  features. Free tools like BlurKit provide excellent blur/privacy
-                  features for most use cases at no cost.
+                  (complete data removal), batch processing, and legal
+                  compliance features. Free tools like BlurKit provide excellent
+                  blur/privacy features for most use cases at no cost.
                 </p>
               </div>
 
@@ -509,9 +511,9 @@ export default function BlogPost() {
                   Q: Can I redact PDFs for free?
                 </h3>
                 <p className="text-gray-700">
-                  A: Yes! BlurKit supports both images and PDFs with its free tier
-                  (15 blurs/day). For unlimited PDF redaction, consider upgrading
-                  to BlurKit Premium ($4/month).
+                  A: Yes! BlurKit supports both images and PDFs with its free
+                  tier (15 blurs/day). For unlimited PDF redaction, consider
+                  upgrading to BlurKit Premium ($4/month).
                 </p>
               </div>
 
@@ -530,17 +532,20 @@ export default function BlogPost() {
 
           {/* Conclusion */}
           <section className="mb-12">
-            <h2 className="text-3xl font-bold mb-6 text-gray-900">Final Verdict</h2>
+            <h2 className="text-3xl font-bold mb-6 text-gray-900">
+              Final Verdict
+            </h2>
             <p className="text-gray-700 leading-relaxed mb-4">
-              After extensive testing, <strong>BlurKit</strong> emerges as the clear
-              winner for free image and PDF redaction in 2025. Its combination of
-              browser-based privacy, comprehensive features, and generous free tier
-              (15 blurs/day) makes it the best choice for most users.
+              After extensive testing, <strong>BlurKit</strong> emerges as the
+              clear winner for free image and PDF redaction in 2025. Its
+              combination of browser-based privacy, comprehensive features, and
+              generous free tier (15 blurs/day) makes it the best choice for
+              most users.
             </p>
             <p className="text-gray-700 leading-relaxed mb-6">
               For users needing unlimited free redactions without PDF support,
-              Redact.photo is a solid alternative. Advanced users requiring complex
-              editing should consider GIMP.
+              Redact.photo is a solid alternative. Advanced users requiring
+              complex editing should consider GIMP.
             </p>
 
             <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg p-8 text-center">
@@ -548,8 +553,8 @@ export default function BlogPost() {
                 Ready to Protect Your Sensitive Data?
               </h3>
               <p className="mb-6 text-blue-100">
-                Join thousands of users protecting their privacy with BlurKit&apos;s
-                powerful redaction tools.
+                Join thousands of users protecting their privacy with
+                BlurKit&apos;s powerful redaction tools.
               </p>
               <Link href="/editor">
                 <Button
